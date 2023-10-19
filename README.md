@@ -1,13 +1,34 @@
-**Introduction****
+**Introduction**
 
 
-**Requirements****
+**Requirements**
 
 
-**User Stories****
+**User Stories**
 
 
-**Development Process****
+**Development Process**
+
+
+
+**Agile Methodology -- (Sprints)**
+
+
+
+**Installation**
+
+
+
+**Usage**
+
+
+
+
+**Contribution Guidelines**
+
+
+
+**License**
 
 
 
