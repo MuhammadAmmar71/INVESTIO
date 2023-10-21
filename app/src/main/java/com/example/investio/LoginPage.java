@@ -9,8 +9,8 @@ import android.view.View;
 import android.widget.Button;
 
 public class LoginPage extends AppCompatActivity {
-Button btnSignin;
-Button btnLoginSuccessful;
+    Button btnSignin;
+    Button btnLoginSuccessful;
 
     @SuppressLint("MissingInflatedId")
     @Override
