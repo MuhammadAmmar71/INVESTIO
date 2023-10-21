@@ -8,4 +8,12 @@
     android:background="#4AA24D"
     tools:context=".HomeActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Home Screen"
+        android:textStyle="bold"
+        android:textSize="34sp"
+        android:textColor="#fff"/>
+
 </LinearLayout>
