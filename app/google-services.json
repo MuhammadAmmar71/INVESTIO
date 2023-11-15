@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "621075829303",
+    "project_id": "investio-eb03b",
+    "storage_bucket": "investio-eb03b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:621075829303:android:b5d65dbab61615416625b2",
+        "android_client_info": {
+          "package_name": "com.example.investio"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCjkwDBkR-o3uRs8D-p75rRDm4Htx1x1A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

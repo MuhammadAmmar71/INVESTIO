@@ -5,45 +5,51 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4AA24D"
-    android:orientation="vertical"
+    android:background="#4CAF50"
     android:gravity="center"
     tools:context=".LoginPage">
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:gravity="center"
         >
-        <TextView
+
+        <EditText
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Login Page"
-            android:textColor="#fff"
-            android:textStyle="bold"
-            android:textSize="35sp"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Email"
+            android:id="@+id/edtlemail"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Password"
+            android:id="@+id/edtlpswd"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="login"
+            android:id="@+id/btnlogin"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Signin"
-            android:textSize="34sp"
-            android:id="@+id/btnSignin"
-
+            android:text="not registered"
+            android:id="@+id/btnnotreg"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login Successful"
-            android:textSize="34sp"
-            android:id="@+id/btnLoginSuccessful"
-
+            android:text="GOOGLE"
+            android:id="@+id/btngoogle"
             />
 
 
     </LinearLayout>
-
-
-
-
-
 </LinearLayout>

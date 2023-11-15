@@ -5,33 +5,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#4CAF50"
+    android:orientation="vertical"
     android:gravity="center"
-    android:background="#4AA24D"
     tools:context=".SignupPage">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-
+        android:gravity="center"
         >
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Full Name"
+            android:id="@+id/edtfname"
+            android:layout_margin="12sp"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Email"
+            android:id="@+id/edtemail"
+            android:layout_margin="12sp"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Password"
+            android:id="@+id/edtpswd"
+            android:layout_margin="12sp"
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Signup Page"
-            android:textColor="#fff"
-            android:textStyle="bold"
-            android:textSize="35sp"
-            android:gravity="center"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:ems="15"
+            android:hint="Confirm password"
+            android:layout_margin="12sp"
+            android:id="@+id/edtconfirmpswd"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="register"
+            android:id="@+id/btnreg"
             />
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Signup successful"
-            android:id="@+id/btnSigninSuccessful"
-            android:gravity="center"
+            android:text="Already registered"
+            android:id="@+id/btnalreg"
             />
+
     </LinearLayout>
 
 
