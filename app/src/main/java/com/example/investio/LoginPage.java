@@ -3,7 +3,9 @@ package com.example.investio;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -20,27 +22,38 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginPage extends AppCompatActivity {
     FirebaseAuth fAuth;
-    EditText edtlemail,edtlpswd;
-    Button btnlogin,btnnotreg;
+    EditText edtlemail, edtlpswd;
+    Button btnlogin, btnnotreg;
     Button btngoogle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
 
-        edtlemail=findViewById(R.id.edtlemail);
-        edtlpswd=findViewById(R.id.edtlpswd);
-        btnlogin=findViewById(R.id.btnlogin);
-        btnnotreg=findViewById(R.id.btnnotreg);
+        edtlemail = findViewById(R.id.edtlemail);
+        edtlpswd = findViewById(R.id.edtlpswd);
+        btnlogin = findViewById(R.id.btnlogin);
+        btnnotreg = findViewById(R.id.btnnotreg);
 
-        btngoogle=findViewById(R.id.btngoogle);
+        btngoogle = findViewById(R.id.btngoogle);
 
-        fAuth=FirebaseAuth.getInstance();
+        fAuth = FirebaseAuth.getInstance();
+
 
         btnlogin.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
+
+
+                SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+                SharedPreferences.Editor editor = pref.edit();
+
+                editor.putBoolean("flag", true);
+                editor.apply();
+
 
                 String email = edtlemail.getText().toString().trim();
                 String password = edtlpswd.getText().toString().trim();
@@ -62,15 +75,14 @@ public class LoginPage extends AppCompatActivity {
                     return;
                 }
 
-                fAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(LoginPage.this,"Logged in Successful",Toast.LENGTH_SHORT).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(LoginPage.this, "Logged in Successful", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                        }
-                        else{
-                            Toast.makeText(LoginPage.this,"Error !" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(LoginPage.this, "Error !" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -88,7 +100,7 @@ public class LoginPage extends AppCompatActivity {
         btngoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginPage.this,GoogleSignin.class));
+                startActivity(new Intent(LoginPage.this, GoogleSignin.class));
 
             }
         });
