@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,39 +15,83 @@ import android.widget.Button;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.ArrayList;
+
+
 public class HomeActivity extends AppCompatActivity {
-    Button btnfragstocks, btnfragcrypto;
 
 
-    @Override
+    RecyclerView recview;
+    ArrayList<MainUiParentModelClass> parentModelClassArrayList;
+    ArrayList<MainUiChildModelClass> stocks;
+    ArrayList<MainUiChildModelClass> crypto;
+    ArrayList<MainUiChildModelClass> forex;
+    MainUiParentAdapter parentAdapt;
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        recview = findViewById(R.id.rvparent);
 
-        btnfragstocks = findViewById(R.id.btnfragstocks);
-        btnfragcrypto = findViewById(R.id.btnfragcrypto);
+        parentModelClassArrayList =new ArrayList<>();
+        stocks = new ArrayList<>();
+        crypto = new ArrayList<>();
+        forex = new ArrayList<>();
+
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
 
 
-        btnfragstocks.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.container, new StocksFragment());
-                ft.commit();
-            }
-        });
 
-        btnfragcrypto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getSupportFragmentManager();
-                FragmentTransaction ft = fm.beginTransaction();
-                ft.add(R.id.container, new CryptoFragment());
-                ft.commit();
-            }
-        });
+
+        parentModelClassArrayList.add(new MainUiParentModelClass(stocks));
+
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+
+
+        parentModelClassArrayList.add(new MainUiParentModelClass(crypto));
+
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+        forex.add(new MainUiChildModelClass(R.drawable.forex));
+
+
+        parentModelClassArrayList.add(new MainUiParentModelClass(forex));
+
+
+
+        parentAdapt = new MainUiParentAdapter(parentModelClassArrayList,this);
+        recview.setLayoutManager(new LinearLayoutManager(this));
+        recview.setAdapter(parentAdapt);
+        parentAdapt.notifyDataSetChanged();
+
+
 
 
 
@@ -53,19 +99,23 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    public void logout(View view) {
 
-        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
-        SharedPreferences.Editor editor= pref.edit();
-
-        editor.putBoolean("flag",false);
-        editor.apply();
-
-
-
-        FirebaseAuth.getInstance().signOut();
-        startActivity(new Intent(getApplicationContext(), LoginPage.class));
-        finish();
 
     }
-}
+
+
+//    public void logout(View view) {
+//
+//        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+//        SharedPreferences.Editor editor= pref.edit();
+//
+//        editor.putBoolean("flag",false);
+//        editor.apply();
+//
+//
+//
+//        FirebaseAuth.getInstance().signOut();
+//        startActivity(new Intent(getApplicationContext(), LoginPage.class));
+//        finish();
+//
+//    }
