@@ -19,7 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class SignupPage extends AppCompatActivity {
     EditText edtfname, edtemail, edtpswd, edtconfirmpswd;
-    Button btnalreg, btnreg;
+    Button btnreg;
     FirebaseAuth fAuth;
 
     @Override
@@ -31,7 +31,7 @@ public class SignupPage extends AppCompatActivity {
         edtpswd = findViewById(R.id.edtpswd);
         edtconfirmpswd = findViewById(R.id.edtconfirmpswd);
         edtemail = findViewById(R.id.edtemail);
-        btnalreg = findViewById(R.id.btnalreg);
+
         btnreg = findViewById(R.id.btnreg);
 
         fAuth = FirebaseAuth.getInstance();
@@ -85,13 +85,7 @@ public class SignupPage extends AppCompatActivity {
             }
         });
 
-        btnalreg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent ilogin = new Intent(getApplicationContext(), LoginPage.class);
-                startActivity(ilogin);
-            }
-        });
+
 
 
     }

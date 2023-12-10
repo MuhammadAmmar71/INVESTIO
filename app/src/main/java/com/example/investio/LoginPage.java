@@ -11,6 +11,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.investio.HomeActivity;
@@ -23,8 +25,9 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginPage extends AppCompatActivity {
     FirebaseAuth fAuth;
     EditText edtlemail, edtlpswd;
-    Button btnlogin, btnnotreg;
-    Button btngoogle;
+    Button btnlogin;
+    TextView btnnotreg;
+    LinearLayout btngoogle;
 
 
     @Override

@@ -1,21 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#4AA24D"
     android:gravity="center"
     tools:context=".SplashScreen">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/activityname"
-        android:textSize="45sp"
-        android:textStyle="bold"
-        android:textColor="#fff"
+    <View
+        android:layout_width="18dp"
+        android:layout_height="120dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="20dp"
+        android:background="@color/green"
+        android:id="@+id/topview1"
+        />
+
+    <View
+        android:layout_toStartOf="@+id/topview1"
+        android:layout_width="18dp"
+        android:layout_height="90dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/green"
+        android:visibility="invisible"
+        android:id="@+id/topview2"
+        />
+
+    <View
+        android:layout_toStartOf="@+id/topview2"
+        android:layout_width="18dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="20dp"
+        android:background="@color/green"
+        android:visibility="invisible"
+        android:id="@+id/topview3"
         />
 
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        >
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:visibility="invisible"
+            android:id="@+id/logo"
+            android:src="@color/green"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INVESTIO"
+            android:textStyle="bold"
+            android:textColor="@color/green"
+            android:textSize="25sp"
+            android:visibility="invisible"
+            android:layout_marginTop="20dp"
+            android:id="@+id/logoname"/>
+
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="18dp"
+        android:layout_height="120dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:background="@color/green"
+        android:id="@+id/bottomview1"
+        />
+
+    <View
+        android:layout_toEndOf="@+id/bottomview1"
+        android:layout_width="18dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:background="@color/green"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/bottomview2"
+        android:visibility="invisible"
+        />
+
+    <View
+        android:layout_toEndOf="@+id/bottomview2"
+        android:layout_width="18dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/green"
+        android:visibility="invisible"
+        android:id="@+id/bottomview3"
+        />
+
+
+</RelativeLayout>

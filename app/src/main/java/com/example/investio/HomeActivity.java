@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,10 +29,12 @@ public class HomeActivity extends AppCompatActivity {
     ArrayList<MainUiChildModelClass> forex;
     MainUiParentAdapter parentAdapt;
 
-
+TextView btnlogout;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        btnlogout=findViewById(R.id.btnlogout);
 
         recview = findViewById(R.id.rvparent);
 
@@ -93,6 +96,32 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+     btnlogout.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+             logout(view);
+         }
+     });
+
+
+
+    }
+
+    public void logout(View view) {
+
+        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
+        SharedPreferences.Editor editor= pref.edit();
+
+        editor.putBoolean("flag",false);
+        editor.apply();
+
+
+
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getApplicationContext(), LoginPage.class));
+        finish();
+
+    }
 
 
 
@@ -100,22 +129,3 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
-
-    }
-
-
-//    public void logout(View view) {
-//
-//        SharedPreferences pref = getSharedPreferences("login", MODE_PRIVATE);
-//        SharedPreferences.Editor editor= pref.edit();
-//
-//        editor.putBoolean("flag",false);
-//        editor.apply();
-//
-//
-//
-//        FirebaseAuth.getInstance().signOut();
-//        startActivity(new Intent(getApplicationContext(), LoginPage.class));
-//        finish();
-//
-//    }
