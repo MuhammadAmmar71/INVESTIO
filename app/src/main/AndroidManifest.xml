@@ -14,7 +14,48 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light"
         tools:targetApi="31">
-
+        <activity
+            android:name=".AgricultureStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopPBRatioStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopPERatioStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopDividendYieldStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopTechChinaStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopRealEstateWorldwideStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopReal"
+            android:exported="false" />
+        <activity
+            android:name=".TopHealthWorldwideStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TopTechWorldwideStocks"
+            android:exported="false" />
+        <activity
+            android:name=".BankUSAStocks"
+            android:exported="false" />
+        <activity
+            android:name=".RealEstateUSAStocks"
+            android:exported="false" />
+        <activity
+            android:name=".EdTechUSAStocks"
+            android:exported="false" />
+        <activity
+            android:name=".HealthUSAStocks"
+            android:exported="false" />
+        <activity
+            android:name=".TechUSAStocks"
+            android:exported="false" />
         <activity
             android:name=".GoogleSignin"
             android:exported="false" />

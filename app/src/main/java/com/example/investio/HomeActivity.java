@@ -54,38 +54,40 @@ TextView btnlogout;
         stocks.add(new MainUiChildModelClass(R.drawable.stocks));
         stocks.add(new MainUiChildModelClass(R.drawable.stocks));
         stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
 
 
 
 
         parentModelClassArrayList.add(new MainUiParentModelClass(stocks));
 
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-
-
-        parentModelClassArrayList.add(new MainUiParentModelClass(crypto));
-
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-        forex.add(new MainUiChildModelClass(R.drawable.forex));
-
-
-        parentModelClassArrayList.add(new MainUiParentModelClass(forex));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//
+//
+//        parentModelClassArrayList.add(new MainUiParentModelClass(crypto));
+//
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//
+//
+//        parentModelClassArrayList.add(new MainUiParentModelClass(forex));
 
 
 
