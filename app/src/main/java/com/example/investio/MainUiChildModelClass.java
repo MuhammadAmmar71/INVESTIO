@@ -6,5 +6,9 @@ public class MainUiChildModelClass {
 
     public MainUiChildModelClass(int image) {
         this.image = image;
+
     }
+
+
+
 }

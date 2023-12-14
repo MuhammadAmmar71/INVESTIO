@@ -31,7 +31,8 @@ public class  MainUiParentAdapter extends RecyclerView.Adapter<MainUiParentAdapt
     @Override
     public void onBindViewHolder(@NonNull MainUiParentAdapter.ViewHolder holder, int position) {
         List<MainUiChildModelClass> childModelClassList = parentModelClassList.get(position).childModelClassList;
-        MainUiChildAdapter childAdapter= new MainUiChildAdapter(parentModelClassList.get(position).childModelClassList,context);
+        MainUiChildAdapter childAdapter= new MainUiChildAdapter((StocksOnClickInterface)context,parentModelClassList.get(position).childModelClassList,context);
+        //Since you are already implementing StocksOnClickInterface in HomeActivity, you can pass HomeActivity as the interface implementation (StocksOnClickInterface)context
         holder.childrv.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.HORIZONTAL,false));
         holder.childrv.setAdapter(childAdapter);
         childAdapter.notifyDataSetChanged();

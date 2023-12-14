@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements StocksOnClickInterface{
 
 
     RecyclerView recview;
@@ -140,6 +140,8 @@ public class HomeActivity extends AppCompatActivity {
 
 
 
+
+
     }
 
     private void logout(View view) {
@@ -155,7 +157,132 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(new Intent(getApplicationContext(), LoginPage.class));
         finish();
     }
+
+    @Override
+    public void onItemClick(int position) {
+
+        // Determine which item was clicked
+        MainUiChildModelClass clickedItem = stocks.get(position);
+
+        // Start a unique activity based on the item clicked
+        Intent intent;
+        switch (position) {
+            case 0:
+                intent = new Intent(this, TechUSAStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+            case 1:
+                intent = new Intent(this, HealthUSAStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+            case 2:
+                intent = new Intent(this, EdTechUSAStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+            case 3:
+                intent = new Intent(this, RealEstateUSAStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 4:
+                intent = new Intent(this, BankUSAStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+            case 5:
+                intent = new Intent(this, TopTechWorldwideStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 6:
+                intent = new Intent(this, TopHealthWorldwideStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 7:
+                intent = new Intent(this, TopRealEstateWorldwideStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 8:
+                intent = new Intent(this, TopTechChinaStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 9:
+                intent = new Intent(this, TopDividendYieldStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 10:
+                intent = new Intent(this, TopPERatioStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 11:
+                intent = new Intent(this, TopPBRatioStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+
+
+            case 12:
+                intent = new Intent(this, AgricultureStocks.class);
+                // You can pass any data you need to the activity using intent.putExtra()
+                // For example: intent.putExtra("stock_symbol", "AAPL");
+                startActivity(intent);
+                break;
+
+        }
+
+
     }
+}
+
 
 
 
