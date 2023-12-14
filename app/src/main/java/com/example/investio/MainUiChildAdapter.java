@@ -22,10 +22,7 @@ public class MainUiChildAdapter extends  RecyclerView.Adapter<MainUiChildAdapter
         this.childModelClassList = childModelClassList;
         this.context = context;
     }
-//    public MainUiChildAdapter(List<MainUiChildModelClass> childModelClassList, Context context) {
-//        this.childModelClassList = childModelClassList;
-//        this.context = context;
-//    }
+
 
     @NonNull
     @Override
@@ -72,18 +69,6 @@ public class MainUiChildAdapter extends  RecyclerView.Adapter<MainUiChildAdapter
             childimage=itemView.findViewById(R.id.img);
 
 
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if(stocksOnClickInterface!=null){
-//                        int position= getAdapterPosition();
-//
-//                        if(position!=RecyclerView.NO_POSITION){
-//                            stocksOnClickInterface.onItemClick(position);
-//                        }
-//                    }
-//                }
-//            });
 
 
         }

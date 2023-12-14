@@ -73,4 +73,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     implementation ("com.google.android.gms:play-services-auth:20.7.0")
+
+    implementation("com.squareup.retrofit2:converter-gson:2.0.2")
+    implementation("com.squareup.retrofit2:retrofit:2.0.2")
 }
