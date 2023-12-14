@@ -50,7 +50,7 @@
             android:adjustViewBounds="true"
             android:visibility="invisible"
             android:id="@+id/logo"
-            android:src="@color/green"/>
+            android:src="@drawable/applogo"/>
 
         <TextView
             android:layout_width="wrap_content"

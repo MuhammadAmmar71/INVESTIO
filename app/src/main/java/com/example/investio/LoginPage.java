@@ -17,6 +17,10 @@ import android.widget.Toast;
 
 import com.example.investio.HomeActivity;
 import com.example.investio.SignupPage;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -29,11 +33,37 @@ public class LoginPage extends AppCompatActivity {
     TextView btnnotreg;
     LinearLayout btngoogle;
 
+//    GoogleSignInOptions gso;
+//    GoogleSignInClient gsc;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
+
+//        gso= new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .build();
+//        gsc= GoogleSignIn.getClient(this,gso);
+//
+//        GoogleSignInAccount account=GoogleSignIn.getLastSignedInAccount(this);
+//        if(account!=null){
+//            String Mail=account.getEmail();
+//            edtlemail.setText(Mail);
+//        }
+//
+
+
+
+
+
+
+
+
+
+
+
 
         edtlemail = findViewById(R.id.edtlemail);
         edtlpswd = findViewById(R.id.edtlpswd);
