@@ -56,19 +56,19 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         crypto = new ArrayList<>();
         forex = new ArrayList<>();
 
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
-        stocks.add(new MainUiChildModelClass(R.drawable.stocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.graph));
 
 
         parentModelClassArrayList.add(new MainUiParentModelClass(stocks));

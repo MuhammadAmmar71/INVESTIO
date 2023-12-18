@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/green"
+
     android:orientation="vertical"
 
     tools:context=".HomeActivity">
@@ -20,6 +20,7 @@
             android:id="@+id/gainlosecard"
             app:cardCornerRadius="20dp"
             app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@color/green"
             />
         <LinearLayout
             android:layout_width="wrap_content"
@@ -32,6 +33,7 @@
                 android:padding="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@color/green"
                 >
                 <TextView
                     android:layout_width="match_parent"
@@ -40,6 +42,7 @@
                     android:textStyle="bold"
                     android:textSize="25sp"
                     android:id="@+id/btnlogout"
+                    android:textColor="#fff"
                     />
 
 
@@ -51,6 +54,7 @@
                 android:padding="10dp"
                 app:cardCornerRadius="20dp"
                 app:cardUseCompatPadding="true"
+                app:cardBackgroundColor="@color/green"
                 />
 
         </LinearLayout>
@@ -70,6 +74,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/rvparent"
             android:padding="10dp"
+
             />
 
     </LinearLayout>
@@ -81,6 +86,7 @@
         android:id="@+id/anotherCardView"
         app:cardCornerRadius="20dp"
         app:cardUseCompatPadding="true"
+        app:cardBackgroundColor="@color/green"
         />
 
 </LinearLayout>

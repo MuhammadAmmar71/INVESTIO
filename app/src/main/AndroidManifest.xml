@@ -32,9 +32,7 @@
         <activity
             android:name=".TopRealEstateWorldwideStocks"
             android:exported="false" />
-        <activity
-            android:name=".TopReal"
-            android:exported="false" />
+
         <activity
             android:name=".TopHealthWorldwideStocks"
             android:exported="false" />

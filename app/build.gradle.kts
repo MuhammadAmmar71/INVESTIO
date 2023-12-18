@@ -10,8 +10,8 @@ android {
 
     defaultConfig {
         applicationId = "com.example.investio"
-        minSdk = 21
-        targetSdk = 33
+        minSdk = 29
+        targetSdkVersion(rootProject.extra["defaultTargetSdkVersion1"] as Int)
         versionCode = 1
         versionName = "1.0"
 
@@ -20,6 +20,8 @@ android {
             useSupportLibrary = true
         }
     }
+
+
 
     buildTypes {
         release {
