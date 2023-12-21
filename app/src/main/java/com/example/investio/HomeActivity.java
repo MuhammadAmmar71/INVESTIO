@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -22,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 
@@ -36,9 +38,12 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
     ArrayList<MainUiChildModelClass> forex;
     MainUiParentAdapter parentAdapt;
 
+    TextView txtuserid;
+
 //    GoogleSignInOptions gso;
 //    GoogleSignInClient gsc;
 
+    FirebaseAuth currentuserid;
 
     TextView btnlogout;
 
@@ -50,6 +55,11 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         btnlogout = findViewById(R.id.btnlogout);
 
         recview = findViewById(R.id.rvparent);
+
+        txtuserid=findViewById(R.id.txtuserid);
+
+
+
 
         parentModelClassArrayList = new ArrayList<>();
         stocks = new ArrayList<>();
@@ -66,9 +76,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+
 
 
         parentModelClassArrayList.add(new MainUiParentModelClass(stocks));
@@ -115,6 +123,17 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         });
 
 
+       //fetching userid from firebase
+        txtuserid.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseUser currentuserid=FirebaseAuth.getInstance().getCurrentUser();
+                Toast.makeText(getApplicationContext(), "" + currentuserid.getUid(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+
 //       btnlogout.setOnClickListener(new View.OnClickListener() {
 //           @Override
 //           public void onClick(View view) {
@@ -142,7 +161,10 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
 
+
     }
+
+
 
     private void logout(View view) {
 
@@ -216,34 +238,9 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
 
+
+
             case 6:
-                intent = new Intent(this, TopHealthWorldwideStocks.class);
-                // You can pass any data you need to the activity using intent.putExtra()
-                // For example: intent.putExtra("stock_symbol", "AAPL");
-                startActivity(intent);
-                break;
-
-
-
-            case 7:
-                intent = new Intent(this, TopRealEstateWorldwideStocks.class);
-                // You can pass any data you need to the activity using intent.putExtra()
-                // For example: intent.putExtra("stock_symbol", "AAPL");
-                startActivity(intent);
-                break;
-
-
-
-            case 8:
-                intent = new Intent(this, TopTechChinaStocks.class);
-                // You can pass any data you need to the activity using intent.putExtra()
-                // For example: intent.putExtra("stock_symbol", "AAPL");
-                startActivity(intent);
-                break;
-
-
-
-            case 9:
                 intent = new Intent(this, TopDividendYieldStocks.class);
                 // You can pass any data you need to the activity using intent.putExtra()
                 // For example: intent.putExtra("stock_symbol", "AAPL");
@@ -252,7 +249,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
 
-            case 10:
+            case 7:
                 intent = new Intent(this, TopPERatioStocks.class);
                 // You can pass any data you need to the activity using intent.putExtra()
                 // For example: intent.putExtra("stock_symbol", "AAPL");
@@ -261,7 +258,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
 
-            case 11:
+            case 8:
                 intent = new Intent(this, TopPBRatioStocks.class);
                 // You can pass any data you need to the activity using intent.putExtra()
                 // For example: intent.putExtra("stock_symbol", "AAPL");
@@ -270,7 +267,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
 
-            case 12:
+            case 9:
                 intent = new Intent(this, AgricultureStocks.class);
                 // You can pass any data you need to the activity using intent.putExtra()
                 // For example: intent.putExtra("stock_symbol", "AAPL");

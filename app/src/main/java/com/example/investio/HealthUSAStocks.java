@@ -59,9 +59,16 @@ public class HealthUSAStocks extends AppCompatActivity {
 
         // Add multiple symbols to the list
         List<String> symbols = new ArrayList<>();
-        symbols.add("JNJ");
-        symbols.add("UNH");
-        symbols.add("PFE");
+//        symbols.add("JNJ");
+//        symbols.add("UNH");
+//        symbols.add("PFE");
+//        symbols.add("MRK");
+//        symbols.add("ABT");
+//        symbols.add("AMGN");
+//        symbols.add("TMO");
+//        symbols.add("MDT");
+//        symbols.add("GILD");
+//        symbols.add("BMY");
         // Fetch data from the API
         for (String symbol : symbols) {
             callingapi(symbol, companyDataList);

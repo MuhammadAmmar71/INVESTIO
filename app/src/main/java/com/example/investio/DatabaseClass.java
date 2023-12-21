@@ -416,16 +416,13 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 7,
                 8,
                 9,
-                10,
-                11,
-                12,
-                13
+                10
 
         };
 
-        int[] stockIds = new int[130];
+        int[] stockIds = new int[100];
 
-        for (int i = 0; i < 130; i++) {
+        for (int i = 0; i < 100; i++) {
             stockIds[i] = i + 1;
         }
 
@@ -458,9 +455,6 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 "Real Estate-USA",
                 "Bank-USA",
                 "Agriculture",
-                "Top 10 Health Worldwide",
-                "Top 10 Real Estate Worldwide",
-                "Top 10 tech China Stocks",
                 "Top 10 Dividend Yield Stocks",
                 "Top 10 P/E Ratio stocks",
                 "Top 10 P/B Ratio",
@@ -477,15 +471,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 7,
                 8,
                 9,
-                10,
-                11,
-                12,
-                13
+                10
 
         };
 
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 10; i++) {
             ContentValues cv = new ContentValues();
             cv.put("portfoliotype", Stockcategories[i]);
             cv.put("portfolioid", portfolioid[i]);

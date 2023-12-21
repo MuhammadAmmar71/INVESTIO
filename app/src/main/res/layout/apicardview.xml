@@ -18,11 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Symbol: " />
 
-    <TextView
-        android:id="@+id/companyidTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ID: " />
+
 
     <TextView
         android:id="@+id/closeTextView"

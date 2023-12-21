@@ -26,16 +26,7 @@
         <activity
             android:name=".TopDividendYieldStocks"
             android:exported="false" />
-        <activity
-            android:name=".TopTechChinaStocks"
-            android:exported="false" />
-        <activity
-            android:name=".TopRealEstateWorldwideStocks"
-            android:exported="false" />
 
-        <activity
-            android:name=".TopHealthWorldwideStocks"
-            android:exported="false" />
         <activity
             android:name=".TopTechWorldwideStocks"
             android:exported="false" />
@@ -62,7 +53,13 @@
             android:exported="false" />
         <activity
             android:name=".LoginPage"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".SplashScreen"
             android:exported="true">
@@ -71,11 +68,7 @@
         <activity
             android:name=".HomeActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
