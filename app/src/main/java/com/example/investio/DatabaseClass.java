@@ -13,74 +13,495 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class DatabaseClass extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME="fintech";
-    private static final int DATABASE_VERSION =1;
-    private static final String TABLE_NAME="TechUSA";
-    private static final String COLUMN_COMPANY="COMPANY_NAME";
-    private static final String COLUMN_SYMBOL="Ticker_Symbols";
-    private static final String ROW_ID="ROW_ID";
+
+    private static final String DATABASE_NAME = "INVESTECH";
+    private static final int DATABASE_VERSION = 1;
 
 
     public DatabaseClass(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
 
 
-
-
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+// Create Wallet table
+        sqLiteDatabase.execSQL("CREATE TABLE Wallet (" +
+                "Walletid INT PRIMARY KEY, " +
+                "totalamount INT, " +
+                "PercentageROI FLOAT, " +
+                "Walletlevel INT, " +
+                "StockPortfolio INTEGER, " +
+                "CryptoAsset INTEGER, " +
+                "ForexAsset INTEGER, " +
+                "BondsEquities INTEGER, " +
+                "IPOPresence INTEGER, " +
+                "Created_at TIMESTAMP, " +
+                "FOREIGN KEY (StockPortfolio) REFERENCES StockPortfolios(portfolioid), " +
+                "FOREIGN KEY (CryptoAsset) REFERENCES CryptoAsset(cryptoassetid), " +
+                "FOREIGN KEY (ForexAsset) REFERENCES forexasset(fasset_id)" +
+                ")");
 
-        sqLiteDatabase.execSQL("CREATE TABLE " + TABLE_NAME + "("
-                + ROW_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +COLUMN_COMPANY + " TEXT,"
-                +COLUMN_SYMBOL + " TEXT" + ")"
-        );
+// Create Users table
+        sqLiteDatabase.execSQL("CREATE TABLE Users (" +
+                "Userid INT PRIMARY KEY, " +
+                "Walletid INT, " +
+                "FOREIGN KEY (Walletid) REFERENCES Wallet(Walletid)" +
+                ")");
+
+// Create Transactions table
+        sqLiteDatabase.execSQL("CREATE TABLE Transactions (" +
+                "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "walletid INTEGER, " +
+                "amount REAL, " +
+                "transactiontime TIME, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                ")");
+
+// Create StockPortfolios table
+        sqLiteDatabase.execSQL("CREATE TABLE StockPortfolios (" +
+                "portfolioid INTEGER PRIMARY KEY, " +
+                "portfoliotype TEXT" +
+                ")");
+
+// Create stockslist table
+        sqLiteDatabase.execSQL("CREATE TABLE stockslist (" +
+                "stockid INTEGER PRIMARY KEY , " +
+                "portfolioid INTEGER, " +
+                "StockName TEXT, " +
+                "Stocksymbol TEXT, " +
+                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
+                ")");
+
+// Create forexasset table
+        sqLiteDatabase.execSQL("CREATE TABLE forexasset (" +
+                "fasset_id INTEGER PRIMARY KEY, " +
+                "Forex_asset_name TEXT, " +
+                "time_created TIMESTAMP" +
+                ")");
+
+// Create Currencies table
+        sqLiteDatabase.execSQL("CREATE TABLE Currencies (" +
+                "currencyid INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "forexasset INTEGER, " +
+                "currencyname TEXT, " +
+                "currencysymbol TEXT, " +
+                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id)" +
+                ")");
+
+// Create Customportfolio table
+        sqLiteDatabase.execSQL("CREATE TABLE Customportfolio (" +
+                "portfolioid INTEGER PRIMARY KEY, " +
+                "StockSymbol VARCHAR(255), " +
+                "Stockquantity FLOAT, " +
+                "purchaseprice FLOAT, " +
+                "purchasedate TIMESTAMP, " +
+                "stockid INTEGER, " +
+                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid), " +
+                "FOREIGN KEY (stockid) REFERENCES stockslist(stockid)" +
+                ")");
+
+// Create CryptoAsset table
+        sqLiteDatabase.execSQL("CREATE TABLE CryptoAsset (" +
+                "cryptoassetid INTEGER PRIMARY KEY, " +
+                "time_created TIMESTAMP" +
+                ")");
+
+// Create Crypto table
+        sqLiteDatabase.execSQL("CREATE TABLE Crypto (" +
+                "cryptoid INTEGER PRIMARY KEY, " +
+                "cryptoassetid INTEGER, " +
+                "cryptosymbol VARCHAR(255), " +
+                "FOREIGN KEY (cryptoassetid) REFERENCES CryptoAsset(cryptoassetid)" +
+                ")");
+
+// Create Metals table
+        sqLiteDatabase.execSQL("CREATE TABLE Metals (" +
+                "Metalid INTEGER PRIMARY KEY, " +
+                "MetalSymbol TEXT, " +
+                "MetalPrice REAL" +
+                ")");
+
+// Create UserPortoflio table
+        sqLiteDatabase.execSQL("CREATE TABLE UserPortoflio (" +
+                "walletid INTEGER PRIMARY KEY, " +
+                "stockportfolio INTEGER, " +
+                "presentinstock REAL, " +
+                "cryptoasset INTEGER, " +
+                "presentincrypto REAL, " +
+                "forexasset INTEGER, " +
+                "presentinforex REAL, " +
+                "metalasset INTEGER, " +
+                "presentinmetal REAL, " +
+                "customportfolio INTEGER, " +
+                "presentincustomport REAL, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid), " +
+                "FOREIGN KEY (cryptoasset) REFERENCES CryptoAsset(cryptoassetid), " +
+                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id), " +
+                "FOREIGN KEY (metalasset) REFERENCES Metals(Metalid), " +
+                "FOREIGN KEY (customportfolio) REFERENCES Customportfolio(portfolioid)" +
+                ")");
+
+// Create PortfolioTransaction table
+        sqLiteDatabase.execSQL("CREATE TABLE PortfolioTransaction (" +
+                "transactionid INTEGER PRIMARY KEY, " +
+                "walletid INTEGER, " +
+                "stockportfolio INTEGER, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
+                ")");
+
+// Create AmountHistory table
+        sqLiteDatabase.execSQL("CREATE TABLE AmountHistory (" +
+                "walletid INTEGER PRIMARY KEY, " +
+                "totalamount REAL, " +
+                "day DATETIME, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                ")");
+
+
+        // Populate stockslist table method call
+        populateStocksList(sqLiteDatabase);
+
+        populateStockPortfolios(sqLiteDatabase);
+
 
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+
+        // Drop all tables if exist
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Users");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Wallet");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Transactions");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS StockPortfolios");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stockslist");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS forexasset");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Currencies");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Customportfolio");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS CryptoAsset");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Crypto");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Metals");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
+
+
+        // Recreate all tables
         onCreate(sqLiteDatabase);
 
 
+    }
+
+    // Method to populate stockslist table
+    private void populateStocksList(SQLiteDatabase db) {
+        String[] stockNames = {
+                "Apple Inc.",
+                "Microsoft Corporation",
+                "Amazon.com Inc.",
+                "Alphabet Inc.",
+                "Meta Platforms, Inc.",
+                "Tesla, Inc.",
+                "Adobe Inc.",
+                "NVIDIA Corporation",
+                "Salesforce.com Inc.",
+                "PayPal Holdings, Inc.",
+                "Johnson & Johnson",
+                "UnitedHealth Group Incorporated",
+                "Pfizer Inc.",
+                "Merck & Co., Inc.",
+                "Abbott Laboratories",
+                "Amgen Inc.",
+                "Thermo Fisher Scientific Inc.",
+                "Medtronic plc",
+                "Gilead Sciences, Inc.",
+                "Bristol Myers Squibb Company",
+                "Chegg, Inc.",
+                "2U, Inc.",
+                "Coursera, Inc.",
+                "Pluralsight, Inc.",
+                "Instructure Holdings, Inc.",
+                "GSX Techedu Inc.",
+                "New Oriental Education & Technology Group Inc.",
+                "TAL Education Group",
+                "K12 Inc.",
+                "Edison Nation, Inc.",
+                "Simon Property Group, Inc.",
+                "Prologis, Inc.",
+                "AvalonBay Communities, Inc.",
+                "Equity Residential",
+                "Public Storage",
+                "Digital Realty Trust, Inc.",
+                "Realty Income Corporation",
+                "Welltower Inc.",
+                "American Tower Corporation",
+                "Ventas, Inc.",
+                "JPMorgan Chase & Co.",
+                "Bank of America Corporation",
+                "Wells Fargo & Co.",
+                "Citigroup Inc.",
+                "Goldman Sachs Group Inc.",
+                "Morgan Stanley",
+                "U.S. Bancorp",
+                "PNC Financial Services Group Inc.",
+                "TD Bank",
+                "Truist Financial Corporation",
+                "Deere & Company",
+                "Monsanto",
+                "Syngenta AG",
+                "Archer-Daniels-Midland Company",
+                "Nutrien Ltd.",
+                "Bunge Limited",
+                "Corteva, Inc.",
+                "Wilmar International Limited",
+                "The Mosaic Company",
+                "Zoetis Inc.",
+                "Alibaba Group Holding Limited",
+                "Tencent Holdings Limited",
+                "AMeituan Dianping",
+                "JD.com, Inc.",
+                "Baidu, Inc.",
+                "NetEase, Inc.",
+                "Pinduoduo Inc.",
+                "Xiaomi Corporation",
+                "Kuaishou Technology",
+                "Trip.com Group Limited",
+                "Nestle S.A.",
+                "Royal Dutch Shell plc",
+                "Unilever PLC",
+                "Novo Nordisk A/S",
+                "Sanofi",
+                "Siemens AG",
+                "SAP SE",
+                "Roche Holding AG",
+                "AstraZeneca PLC",
+                "Telstra Corporation Limited",
+                "Adial Pharmaceuticals",
+                "JanOne",
+                "KuuHub",
+                "Express",
+                "Spin Master",
+                "Performance Shipping",
+                "Banco Marco",
+                "Ultimate Games",
+                "Tingo Group",
+                "TherapeuticsMD",
+                "Itochu-techno Solutions",
+                "Broccoli",
+                "Great Panther Mining",
+                "Allen Pharmaceuticals",
+                "Genocea Biosciences",
+                "Signature Bank",
+                "Zovio",
+                "Vinco Ventures",
+                "Alpine Summint Energy Partners",
+                "Mallinckrodt Pharmaceuticals"
+        };
+
+        String[] stockSymbols = {
+                "AAPL",
+                "MSFT",
+                "AMZN",
+                "GOOGL",
+                "FB",
+                "TSLA",
+                "ADBE",
+                "NVDA",
+                "CRM",
+                "PYPL",
+                "JNJ",
+                "UNH",
+                "PFE",
+                "MRK",
+                "ABT",
+                "AMGN",
+                "TMO",
+                "MDT",
+                "GILD",
+                "BMY",
+                "CHGG",
+                "TWOU",
+                "COUR",
+                "PS",
+                "INST",
+                "GSX",
+                "EDU",
+                "TAL",
+                "LRN",
+                "EDNT",
+                "SPG",
+                "PLD",
+                "AVB",
+                "EQR",
+                "PSA",
+                "DLR",
+                "O",
+                "WELL",
+                "AMT",
+                "VTR",
+                "JPM",
+                "BAC",
+                "WFC",
+                "C",
+                "GS",
+                "MS",
+                "USB",
+                "PNC",
+                "TD",
+                "TFC",
+                "DE",
+                "BAYRY",
+                "SYT",
+                "ADM",
+                "NTR",
+                "BG",
+                "CTVA",
+                "F34.SI",
+                "MOS",
+                "ZTS",
+                "BABA",
+                "TCEHY",
+                "3690.HK",
+                "JD",
+                "BIDU",
+                "NTES",
+                "PDD",
+                "1810.HK",
+                "1024.HK",
+                "TCOM",
+                "NESN",
+                "RDS.A, RDS.B",
+                "UL",
+                "NVO",
+                "SNY",
+                "SIEGY",
+                "SAP",
+                "ROG",
+                "AZN",
+                "TLSYY",
+                "ADIL",
+                "JAN",
+                "KUU.V",
+                "EXPR",
+                "TOY.TO",
+                "PSHG",
+                "BMA",
+                "ULG.WA",
+                "TIO",
+                "TXMD",
+                "4739.T",
+                "2706.T",
+                "GPLDF",
+                "ALNAQ",
+                "GNCA",
+                "SBNY",
+                "ZVOI",
+                "BBIG",
+                "ALPSQ",
+                "MNK"
+        };
+
+        int[] portfolioId = {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+
+        };
+
+        int[] stockIds = new int[130];
+
+        for (int i = 0; i < 130; i++) {
+            stockIds[i] = i + 1;
+        }
+
+
+        int portfolioCounter = 0; // Counter for portfolioId
+
+        for (int i = 0; i < stockNames.length; i++) {
+            ContentValues values = new ContentValues();
+            values.put("StockName", stockNames[i]);
+            values.put("Stocksymbol", stockSymbols[i]);
+            values.put("stockid", stockIds[i]);
+
+            // Assign portfolioId for every 10 stocks
+            if (i % 10 == 0) {
+                portfolioCounter++;
+            }
+            values.put("portfolioid", portfolioId[portfolioCounter]);
+
+            db.insert("stockslist", null, values);
+        }
 
     }
 
-    // Check if data already exists in the table
-    private boolean isDataExists(SQLiteDatabase db, String company_name) {
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE " + COLUMN_COMPANY + "=?", new String[]{company_name});
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-        return exists;
+    private void populateStockPortfolios(SQLiteDatabase db) {
+
+        String[] Stockcategories = {
+                "Tech-USA",
+                "Health-USA",
+                "Edtech-USA",
+                "Real Estate-USA",
+                "Bank-USA",
+                "Agriculture",
+                "Top 10 Health Worldwide",
+                "Top 10 Real Estate Worldwide",
+                "Top 10 tech China Stocks",
+                "Top 10 Dividend Yield Stocks",
+                "Top 10 P/E Ratio stocks",
+                "Top 10 P/B Ratio",
+                "Top ten world tech stocks"
+        };
+
+        int[] portfolioid = {
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13
+
+        };
+
+
+        for (int i = 0; i < 13; i++) {
+            ContentValues cv = new ContentValues();
+            cv.put("portfoliotype", Stockcategories[i]);
+            cv.put("portfolioid", portfolioid[i]);
+            db.insert("StockPortfolios", null, cv);
+        }
+
+
     }
 
-    void addTechUSA(String company_name, String company_symbol) {
 
-
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(COLUMN_COMPANY, company_name);
-        contentValues.put(COLUMN_SYMBOL, company_symbol);
-
-        sqLiteDatabase.insert(TABLE_NAME,null,contentValues);
-
-
-
-
-    }
-
-    // Inside DatabaseClass
-
-    public ArrayList<CompanyData> getAllTechUSA() {
+    public ArrayList<CompanyData> readingStockslist(int startIndex) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME ,null);
+
+        Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 10 OFFSET " + startIndex, null);
 
         ArrayList<CompanyData> companyDataList = new ArrayList<>();
 
@@ -88,16 +509,19 @@ public class DatabaseClass extends SQLiteOpenHelper {
             CompanyData companyData = new CompanyData();
 
             // Check if the column exists in the cursor
-            int companyNameIndex = cursor.getColumnIndex(COLUMN_COMPANY);
-            int companySymbolIndex = cursor.getColumnIndex(COLUMN_SYMBOL);
+            int StockCompanyNameIndex = cursor.getColumnIndex("StockName");
+            int StockCompanySymbolIndex = cursor.getColumnIndex("Stocksymbol");
+            int StockcompanyidIndex = cursor.getColumnIndex("portfolioid");
 
-            if (companyNameIndex != -1 && companySymbolIndex != -1) {
+            if (StockCompanyNameIndex != -1 && StockCompanySymbolIndex != -1 && StockcompanyidIndex != -1) {
                 // Get data from the cursor and set it to the CompanyData object
-                String companyName = cursor.getString(companyNameIndex);
-                String companySymbol = cursor.getString(companySymbolIndex);
+                String companyName = cursor.getString(StockCompanyNameIndex);
+                String companySymbol = cursor.getString(StockCompanySymbolIndex);
+                int companyID = cursor.getInt(StockcompanyidIndex);
 
-                companyData.setCompanyName(companyName);
-                companyData.setCompanySymbol(companySymbol);
+                companyData.setStockName(companyName);
+                companyData.setStockSymbol(companySymbol);
+                companyData.setStockid(companyID);
                 companyData.setClose(null); // You may set the 'close' value based on your requirement
 
                 // Add the CompanyData object to your list or perform any other desired operations
@@ -106,9 +530,11 @@ public class DatabaseClass extends SQLiteOpenHelper {
         }
 
 
-
         return companyDataList;
     }
 
 
 }
+
+
+

@@ -32,53 +32,43 @@ public class HealthUSAStocks extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health_usastocks);
 
-        //...
+
 
         DatabaseClass db = new DatabaseClass(this);
 
 
 
-        db.addTechUSA("Apple Inc.","APPL");
-        db.addTechUSA("Microsoft Corporation","MSFT");
-        db.addTechUSA("Amazon.com Inc","AMZN");
-//        db.addTechUSA("Alphabet Inc.","GOOGL");
-//        db.addTechUSA("MetaPlatforms Inc.","FB");
-//        db.addTechUSA("Tesla Inc.","TSLA");
-//        db.addTechUSA("Adobe Inc.","ADBE");
-//        db.addTechUSA("NVIDIA Corporation","NVDA");
-//        db.addTechUSA("Salesforce.com Inc.","CRM");
-//        db.addTechUSA("PayPal Holdings Inc.","PYPL");
+
 
         recyclerView = findViewById(R.id.recyclerView);
-        textViewResult = findViewById(R.id.textview);
+
 
 //         Set up RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ApiAdapter();
         recyclerView.setAdapter(adapter);
 
-        List<CompanyData> companyDataList = new ArrayList<>();
+        ArrayList<CompanyData> companyDataList = new ArrayList<>();
 
 
-
+// Assuming you want to start fetching from the 10th row (index 9 as indexing starts from 0)
+        int startingIndex = 10;
         // Fetch data from the database
-        List<CompanyData> databaseData = db.getAllTechUSA();
+        List<CompanyData> databaseData = db.readingStockslist(startingIndex);
         companyDataList.addAll(databaseData);
 
         // Add multiple symbols to the list
         List<String> symbols = new ArrayList<>();
-        symbols.add("AAPL");
-        symbols.add("MSFT");
-        symbols.add("AMZN");
-        int i=0;
+        symbols.add("JNJ");
+        symbols.add("UNH");
+        symbols.add("PFE");
         // Fetch data from the API
         for (String symbol : symbols) {
-            i++;
-            callingapi(symbol, companyDataList,i);
+            callingapi(symbol, companyDataList);
         }
     }
 
-    void callingapi(String symbol, List<CompanyData> companyDataList ,int i) {
+    void callingapi(String symbol, List<CompanyData> companyDataList ) {
         //...
 
         Retrofit retrofit = new Retrofit.Builder()
@@ -105,22 +95,22 @@ public class HealthUSAStocks extends AppCompatActivity {
                     // Fetch the first entry from the map
                     TimeSeriesDaily firstTimeSeriesDaily = timeSeriesDailyMap.values().iterator().next();
 
-                    // Get company name and symbol from the CompanyData object in the list
-                    if (!companyDataList.isEmpty()) {
-                        CompanyData companyData = companyDataList.get(i); // You might want to adjust this based on your requirements
 
-                        // Create a CompanyData object with data from the database and API
-                        CompanyData updatedCompanyData = new CompanyData(
-                                companyData.getCompanyName(),
-                                companyData.getCompanySymbol(),
-                                firstTimeSeriesDaily.getClose()
-                        );
 
-                        // Add the data to the existing data in the adapter
-                        adapter.addData(Collections.singletonList(updatedCompanyData));
+                    // Update data in the CompanyData list based on symbol match
+                    for (CompanyData companyData : companyDataList) {
+                        if (companyData.getStockSymbol().equals(symbol)) {
+                            // Update the CompanyData object with data from the API
+                            companyData.setClose(firstTimeSeriesDaily.getClose());
+                            break; // Once found and updated, break the loop
+                        }
                     }
+
+                    // After fetching data from the API and updating companyDataList, set the updated data in the adapter
+                    adapter.setData(companyDataList);
                 }
             }
+
 
 
             @Override
@@ -134,89 +124,14 @@ public class HealthUSAStocks extends AppCompatActivity {
 
 
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_health_usastocks);
-//
-//
-//        DatabaseClass db = new DatabaseClass(this);
-//
-//
-//        db.addTechUSA("Apple Inc.","APPL");
-//        db.addTechUSA("Microsoft Corporation","MSFT");
-//        db.addTechUSA("Amazon.com Inc","AMZN");
-////        db.addTechUSA("Alphabet Inc.","GOOGL");
-////        db.addTechUSA("MetaPlatforms Inc.","FB");
-////        db.addTechUSA("Tesla Inc.","TSLA");
-////        db.addTechUSA("Adobe Inc.","ADBE");
-////        db.addTechUSA("NVIDIA Corporation","NVDA");
-////        db.addTechUSA("Salesforce.com Inc.","CRM");
-////        db.addTechUSA("PayPal Holdings Inc.","PYPL");
-//
-//
-//
-//        recyclerView = findViewById(R.id.recyclerView);
-//        textViewResult = findViewById(R.id.textview);
-//
-//        // Set up RecyclerView
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-//        adapter = new ApiAdapter();
-//        recyclerView.setAdapter(adapter);
-//
-//        // Add multiple symbols to the list
-//        List<String> symbols = new ArrayList<>();
-//        symbols.add("AAPL");
-//        symbols.add("IBM");
-////        symbols.add("FB");
-//        symbols.add("AMZN");
-//
-//        // Call API for each symbol
-//        for (String symbol : symbols) {
-//            callingapi(symbol);
-//        }
-//    }
-//
-//    void callingapi(String symbol) {
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://www.alphavantage.co/")
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .build();
-//
-//        JSONPlaceholderApi jsonPlaceholderApi = retrofit.create(JSONPlaceholderApi.class);
-//
-//        Call<ApiResponse> call = jsonPlaceholderApi.getApiResponse(symbol);
-//
-//        call.enqueue(new Callback<ApiResponse>() {
-//            @Override
-//            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-//                if (!response.isSuccessful()) {
-//                    textViewResult.setText("Code: " + response.code());
-//                    return;
-//                }
-//
-//                ApiResponse apiResponse = response.body();
-//
-//                Map<String, TimeSeriesDaily> timeSeriesDailyMap = apiResponse.getTimeSeriesDailyMap();
-//
 
-//
-//
-//                if (timeSeriesDailyMap != null) {
-//                    // Fetch the first entry from the map
-//                    TimeSeriesDaily firstTimeSeriesDaily = timeSeriesDailyMap.values().iterator().next();
-//
-//                    // Now you can use 'firstTimeSeriesDaily' as needed
-//                    // For example, you might want to update your RecyclerView data with only the first item
-//                    List<TimeSeriesDaily> dataList = Collections.singletonList(firstTimeSeriesDaily);
-//                    adapter.addData(dataList);
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<ApiResponse> call, Throwable t) {
-//                textViewResult.setText(t.getMessage());
-//            }
-//        });
-//    }
-//}
+
+
+
+
+
+
+
+
+
+
