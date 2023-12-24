@@ -130,13 +130,13 @@ public class LoginPage extends AppCompatActivity {
         });
 
 
-        btngoogle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(LoginPage.this, GoogleSignin.class));
-
-            }
-        });
+//        btngoogle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(LoginPage.this, GoogleSignin.class));
+//
+//            }
+//        });
 
     }
 }

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:orientation="vertical"
+    android:background="#03A9F4"
+    android:layout_margin="21dp"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt"
+        android:layout_margin="21dp"
+        android:text="Add amount"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textSize="27dp"
+        android:textColor="#fff"
+
+
+        />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:ems="18"
+        android:hint=" Enter the amount "
+        android:id="@+id/edtamount"
+        android:layout_margin="21dp"
+        android:background="#fff"
+        />
+
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="save"
+        android:id="@+id/btnSave"
+        android:layout_margin="21dp"
+        />
+
+
+</LinearLayout>

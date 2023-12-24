@@ -10,7 +10,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class DatabaseClass extends SQLiteOpenHelper {
 
@@ -26,10 +30,31 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
+
+
+
+        // Create Users table
+        sqLiteDatabase.execSQL("CREATE TABLE Users (" +
+                "Userid INT PRIMARY KEY, " +
+                "Walletid INT, " +
+                "FOREIGN KEY (Walletid) REFERENCES Wallet(Walletid)" +
+                ")");
+
+
+        // Create AmountHistory table
+        sqLiteDatabase.execSQL("CREATE TABLE AmountHistory (" +
+                "walletid INTEGER PRIMARY KEY, " +
+                "totalamount DOUBLE, " +
+                "day DATETIME , " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                ")");
+
+
 // Create Wallet table
         sqLiteDatabase.execSQL("CREATE TABLE Wallet (" +
                 "Walletid INT PRIMARY KEY, " +
-                "totalamount INT, " +
+                "totalamount DOUBLE, " +
+                "Created_at TIMESTAMP, " +
                 "PercentageROI FLOAT, " +
                 "Walletlevel INT, " +
                 "StockPortfolio INTEGER, " +
@@ -37,27 +62,34 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 "ForexAsset INTEGER, " +
                 "BondsEquities INTEGER, " +
                 "IPOPresence INTEGER, " +
-                "Created_at TIMESTAMP, " +
+
                 "FOREIGN KEY (StockPortfolio) REFERENCES StockPortfolios(portfolioid), " +
                 "FOREIGN KEY (CryptoAsset) REFERENCES CryptoAsset(cryptoassetid), " +
                 "FOREIGN KEY (ForexAsset) REFERENCES forexasset(fasset_id)" +
                 ")");
 
-// Create Users table
-        sqLiteDatabase.execSQL("CREATE TABLE Users (" +
-                "Userid INT PRIMARY KEY, " +
-                "Walletid INT, " +
-                "FOREIGN KEY (Walletid) REFERENCES Wallet(Walletid)" +
-                ")");
+
 
 // Create Transactions table
         sqLiteDatabase.execSQL("CREATE TABLE Transactions (" +
                 "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "walletid INTEGER, " +
-                "amount REAL, " +
+                "amount DOUBLE, " +
                 "transactiontime TIME, " +
                 "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
                 ")");
+
+        // Create PortfolioTransaction table
+        sqLiteDatabase.execSQL("CREATE TABLE PortfolioTransaction (" +
+                "transactionid INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "walletid INTEGER, " +
+                "stockportfolio INTEGER, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
+                ")");
+
+
+
 
 // Create StockPortfolios table
         sqLiteDatabase.execSQL("CREATE TABLE StockPortfolios (" +
@@ -144,22 +176,18 @@ public class DatabaseClass extends SQLiteOpenHelper {
                 "FOREIGN KEY (customportfolio) REFERENCES Customportfolio(portfolioid)" +
                 ")");
 
-// Create PortfolioTransaction table
-        sqLiteDatabase.execSQL("CREATE TABLE PortfolioTransaction (" +
-                "transactionid INTEGER PRIMARY KEY, " +
-                "walletid INTEGER, " +
-                "stockportfolio INTEGER, " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
-                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
-                ")");
 
-// Create AmountHistory table
-        sqLiteDatabase.execSQL("CREATE TABLE AmountHistory (" +
-                "walletid INTEGER PRIMARY KEY, " +
-                "totalamount REAL, " +
-                "day DATETIME, " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
-                ")");
+
+        sqLiteDatabase.execSQL("CREATE TABLE STOCKSVALUES ("+
+
+                "rowid INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "stockvalue DOUBLE, " +
+                "timestamp TIMESTAMP" +
+                ")"
+                );
+
+
+
 
 
         // Populate stockslist table method call
@@ -169,6 +197,20 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
     }
+
+//    @Override
+//    public void onConfigure(SQLiteDatabase db) {
+//        super.onConfigure(db);
+//        db.setForeignKeyConstraintsEnabled(true);
+//    }
+
+//    @Override
+//    public void onOpen(SQLiteDatabase db) {
+//        super.onOpen(db);
+//        db.execSQL("PRAGMA foreign_keys=ON;");
+//    }
+
+
 
 
     @Override
@@ -190,6 +232,8 @@ public class DatabaseClass extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS STOCKVALUES");
+
 
 
         // Recreate all tables
@@ -436,11 +480,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
             values.put("stockid", stockIds[i]);
 
             // Assign portfolioId for every 10 stocks
-            if (i % 10 == 0) {
-                portfolioCounter++;
+            if ((i + 1) % 10 == 0) {
+                values.put("portfolioid", portfolioId[portfolioCounter]);
+                portfolioCounter++; // Increment portfolioCounter after every 10 stocks
+            } else {
+                values.put("portfolioid", portfolioId[portfolioCounter]);
             }
-            values.put("portfolioid", portfolioId[portfolioCounter]);
-
             db.insert("stockslist", null, values);
         }
 
@@ -490,9 +535,10 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public ArrayList<CompanyData> readingStockslist(int startIndex) {
 
         SQLiteDatabase db = this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
 
 
-        Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 10 OFFSET " + startIndex, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 2 OFFSET " + startIndex, null);
 
         ArrayList<CompanyData> companyDataList = new ArrayList<>();
 
@@ -525,7 +571,215 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
 
+    public void adduserid(String userid){
+        SQLiteDatabase db=this.getWritableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        ContentValues cv=new ContentValues();
+
+        cv.put("Userid",userid);
+
+        db.insert("Users",null,cv);
+    }
+
+
+
+  public void addamount(double amount,String timestamp){
+        SQLiteDatabase db=this.getWritableDatabase();
+//      db.setForeignKeyConstraintsEnabled(true);
+        ContentValues cv= new ContentValues();
+        cv.put("totalamount",amount);
+        cv.put("day",timestamp);
+        db.insert("AmountHistory",null,cv);
+
+
+  }
+
+    // Function to get the current timestamp
+    public String getCurrentTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date());
+    }
+
+    public void storewalletid(String walletid,String timestamp,Double totalAmount){
+        SQLiteDatabase db=this.getWritableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        ContentValues cv=new ContentValues();
+        cv.put("Walletid",walletid);
+        cv.put("Created_at",timestamp);
+        cv.put("totalamount",totalAmount);
+
+        db.insert("Wallet",null,cv);
+    }
+
+    public boolean readwallet(){
+        SQLiteDatabase db=this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor=db.rawQuery("SELECT Walletid FROM Wallet ",null);
+
+        if(cursor != null && cursor.moveToFirst()){
+            if (!cursor.isNull(0)){
+                 return true;
+
+            }
+            else {
+                  return false;
+            }
+
+        }
+        else {
+            return false;
+        }
+    }
+
+
+    public boolean readuser(){
+        SQLiteDatabase db=this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor=db.rawQuery("SELECT Userid FROM Users ",null);
+
+        if(cursor != null && cursor.moveToFirst()){
+            if (!cursor.isNull(0)){
+                return true;
+
+            }
+            else {
+                return false;
+            }
+
+        }
+        else {
+            return false;
+        }
+    }
+
+
+    public Double totalamount(){
+        SQLiteDatabase db=this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor= db.rawQuery("SELECT SUM(totalamount) FROM AmountHistory",null);
+        Double sum = 0.0;
+        if (cursor != null && cursor.moveToFirst()) {
+            sum = cursor.getDouble(0); // Retrieves the value of the first column in the result set (SUM(totalamount))
+            cursor.close();
+        }
+
+        return sum;
+    }
+
+
+
+    public void storetransactions(Double amountinvest,String Transactiontime){
+        SQLiteDatabase db=this.getWritableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        ContentValues cv= new ContentValues();
+        cv.put("transactiontime",Transactiontime);
+        cv.put("amount",amountinvest);
+        db.insert("Transactions",null,cv);
+    }
+
+    //storing stocks values
+    public  void storestocksvalue(Double Stockvalue,String Timestamp){
+        SQLiteDatabase db=this.getWritableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        ContentValues cv=new ContentValues();
+        cv.put("stockvalue",Stockvalue);
+        cv.put("timestamp",Timestamp);
+        db.insert("STOCKSVALUES",null,cv);
+    }
+
+    //getting average of stocks values
+    public void stocksaverage(){
+        SQLiteDatabase db=this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor= db.rawQuery("SELECT AVG(stockvalue) FROM STOCKSVALUES ",null);
+        Double avgstocks;
+        if(cursor!=null && cursor.moveToFirst()){
+            avgstocks=cursor.getDouble(0);
+        }
+    }
+
+
+    public boolean readStocksValue() {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM STOCKSVALUES", null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return (count >=0 && count <=10); // Returns true if the table is empty
+        }
+
+        return false; // Cursor is null or an error occurred
+    }
+
+
+
+
+
+
+
+
+    public String readFirstStockTime() {
+        SQLiteDatabase db = this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+        Cursor cursor = db.rawQuery("SELECT timestamp FROM STOCKSVALUES ORDER BY timestamp ASC LIMIT 1", null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("timestamp");
+            if (!cursor.isNull(columnIndex)) {
+                String firstStockTimestamp = cursor.getString(columnIndex);
+                cursor.close();
+                return firstStockTimestamp;
+            }
+            cursor.close();
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public int difftimestamp(String firsttimestamp, String currenttimestamp) {
+        int differenceInMinutes = 0;
+
+        SQLiteDatabase db = this.getReadableDatabase();
+//        db.setForeignKeyConstraintsEnabled(true);
+
+        // Fetch the timestamps in seconds and then calculate the difference
+        Cursor cursor = db.rawQuery(
+                "SELECT (strftime('%s', ?, 'utc') - strftime('%s', ?, 'utc')) / 60 AS diff",
+                new String[]{currenttimestamp, firsttimestamp}
+        );
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndex("diff");
+            if (columnIndex != -1) {
+                differenceInMinutes = cursor.getInt(columnIndex);
+            }
+            cursor.close();
+        }
+
+        return differenceInMinutes;
+    }
+
+
+
+
+
+
+
 }
+
+
+
 
 
 

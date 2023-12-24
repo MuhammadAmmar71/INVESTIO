@@ -1,13 +1,22 @@
 package com.example.investio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,21 +35,63 @@ public class HealthUSAStocks extends AppCompatActivity {
     private TextView textViewResult;
     private ApiAdapter adapter;
 
+   Toolbar toolbar;
+   AppCompatButton btninvesting;
+
+    DatabaseClass db = new DatabaseClass(HealthUSAStocks.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_health_usastocks);
 
-
-
-        DatabaseClass db = new DatabaseClass(this);
+        toolbar=findViewById(R.id.toolbar);
 
 
 
+          btninvesting=findViewById(R.id.btninvesting);
+
+
+        btninvesting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Dialog dialog =new Dialog(HealthUSAStocks.this);
+                dialog.setContentView(R.layout.investdialogbox);
+
+                EditText edtamount=dialog.findViewById(R.id.edtamount);
+
+                Button btnInvest=dialog.findViewById(R.id.btninvest);
+
+                btnInvest.setOnClickListener(new View.OnClickListener() {
+
+                    String getamount;
+                    Double amountinvest;
+                    @Override
+                    public void onClick(View view) {
+                        getamount=edtamount.getText().toString();
+                        amountinvest=Double.parseDouble(getamount);
+
+                        String timestamp=db.getCurrentTimestamp();
+                        db.storetransactions(amountinvest,timestamp);
+
+
+
+                        dialog.dismiss();
+
+
+                    }
+                });
+
+                dialog.show();
+
+            }
+        });
 
 
         recyclerView = findViewById(R.id.recyclerView);
+
+
 
 
 //         Set up RecyclerView
@@ -51,6 +102,8 @@ public class HealthUSAStocks extends AppCompatActivity {
         ArrayList<CompanyData> companyDataList = new ArrayList<>();
 
 
+
+
 // Assuming you want to start fetching from the 10th row (index 9 as indexing starts from 0)
         int startingIndex = 10;
         // Fetch data from the database
@@ -59,8 +112,8 @@ public class HealthUSAStocks extends AppCompatActivity {
 
         // Add multiple symbols to the list
         List<String> symbols = new ArrayList<>();
-//        symbols.add("JNJ");
-//        symbols.add("UNH");
+        symbols.add("JNJ");
+        symbols.add("UNH");
 //        symbols.add("PFE");
 //        symbols.add("MRK");
 //        symbols.add("ABT");
@@ -69,14 +122,28 @@ public class HealthUSAStocks extends AppCompatActivity {
 //        symbols.add("MDT");
 //        symbols.add("GILD");
 //        symbols.add("BMY");
-        // Fetch data from the API
+// Fetch data from the API
+
+
         for (String symbol : symbols) {
             callingapi(symbol, companyDataList);
         }
+
+
+
+
+
     }
 
+
+//                                 FUNCTIONS
+
+
+
+
+
+
     void callingapi(String symbol, List<CompanyData> companyDataList ) {
-        //...
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.alphavantage.co/")
@@ -109,6 +176,39 @@ public class HealthUSAStocks extends AppCompatActivity {
                         if (companyData.getStockSymbol().equals(symbol)) {
                             // Update the CompanyData object with data from the API
                             companyData.setClose(firstTimeSeriesDaily.getClose());
+
+
+
+
+//                            if (db.readStocksValue()) {
+//                                String getStockValue = firstTimeSeriesDaily.getClose();
+//                                Double stockValue = Double.parseDouble(getStockValue);
+//                                String timestamp = db.getCurrentTimestamp();
+//                                db.storestocksvalue(stockValue, timestamp);
+//                            }
+//
+//
+//                            else {
+//
+//                                    String currentime= db.getCurrentTimestamp();
+//                                    String firsttime=db.readFirstStockTime();
+//                                    int datediff=
+//                                    datediff=db.difftimestamp(firsttime,currentime);
+//
+//                                    if(datediff>=60){
+//
+//                                        // storing data to database
+//                                        String getstockvalue=firstTimeSeriesDaily.getClose();
+//                                        Double stockvalue=Double.parseDouble(getstockvalue);
+//                                        String timestamp  =db.getCurrentTimestamp();
+//                                        db.storestocksvalue(stockvalue,timestamp);
+//                                  }
+//
+//                            }
+
+
+
+
                             break; // Once found and updated, break the loop
                         }
                     }
@@ -125,9 +225,11 @@ public class HealthUSAStocks extends AppCompatActivity {
                 textViewResult.setText(t.getMessage());
             }
         });
+
+
+
     }
 }
-
 
 
 
