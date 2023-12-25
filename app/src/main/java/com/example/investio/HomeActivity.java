@@ -102,7 +102,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
         }
 
-     //   generating walletid
+        //   generating walletid
         if(!db.readwallet()){
             generatewalletid(db);
         }
@@ -123,14 +123,16 @@ btnfloat.setOnClickListener(new View.OnClickListener() {
         btnSave.setOnClickListener(new View.OnClickListener() {
 
             String getamount;
-            Double amountenter;
+            Double newamount;
             @Override
             public void onClick(View view) {
                  getamount=edtamount.getText().toString();
-                amountenter=Double.parseDouble(getamount);
+                newamount=Double.parseDouble(getamount);
              String timestamp=db.getCurrentTimestamp();
 
-                db.addamount(amountenter,timestamp);
+             Double previousamount = db.readwalletamount();
+                Double totalamount=newamount + previousamount;
+                db.updatewalletamount(totalamount);
 
                 dialog.dismiss();
 
@@ -177,7 +179,21 @@ btnfloat.setOnClickListener(new View.OnClickListener() {
 
     public void fetchuserid(DatabaseClass db){
         FirebaseUser currentuserid=FirebaseAuth.getInstance().getCurrentUser();
-        db.adduserid(currentuserid.getUid());
+
+        String userid;
+        userid=currentuserid.getUid();
+
+
+
+
+        //   generating walletid
+        if(!db.readwallet()){
+            generatewalletid(db);
+        }
+
+        String walletid=db.fetchwalletid();
+
+        db.adduserid(userid,walletid);
 
 
     }
@@ -198,11 +214,13 @@ btnfloat.setOnClickListener(new View.OnClickListener() {
 
         String walletid =stringBuilder.toString();
 
-        String timestamp=db.getCurrentTimestamp();
 
-        Double Totalamount=db.totalamount();
 
-        db.storewalletid(walletid,timestamp,Totalamount);
+        Double amount=0.0;
+
+
+
+        db.addWalletid(walletid,amount);
     }
 
 

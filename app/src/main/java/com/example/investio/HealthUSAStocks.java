@@ -38,6 +38,10 @@ public class HealthUSAStocks extends AppCompatActivity {
    Toolbar toolbar;
    AppCompatButton btninvesting;
 
+    int startingIndex = 10;
+
+    int portfolioid=((startingIndex/10)+1);
+
     DatabaseClass db = new DatabaseClass(HealthUSAStocks.this);
 
     @Override
@@ -72,8 +76,15 @@ public class HealthUSAStocks extends AppCompatActivity {
                         getamount=edtamount.getText().toString();
                         amountinvest=Double.parseDouble(getamount);
 
-                        String timestamp=db.getCurrentTimestamp();
-                        db.storetransactions(amountinvest,timestamp);
+//                        String timestamp=db.getCurrentTimestamp();
+                        String walletid=db.fetchwalletid();
+//                        db.storetransactions(amountinvest,timestamp,walletid);
+
+                        int portfolioid=((startingIndex/10)+1);
+                        Double percentinstockportfolio;
+                        Double amountinwallet=db.readwalletamount();
+                        percentinstockportfolio=((amountinvest/amountinwallet)*100);
+                        db.adduserportfolio(portfolioid,walletid,percentinstockportfolio);
 
 
 
@@ -105,7 +116,7 @@ public class HealthUSAStocks extends AppCompatActivity {
 
 
 // Assuming you want to start fetching from the 10th row (index 9 as indexing starts from 0)
-        int startingIndex = 10;
+        // int startingIndex = 10;
         // Fetch data from the database
         List<CompanyData> databaseData = db.readingStockslist(startingIndex);
         companyDataList.addAll(databaseData);
@@ -177,34 +188,74 @@ public class HealthUSAStocks extends AppCompatActivity {
                             // Update the CompanyData object with data from the API
                             companyData.setClose(firstTimeSeriesDaily.getClose());
 
+                            //preparing data to store into portfolio table
+                            String getStockValue = firstTimeSeriesDaily.getClose();
+                            Double stockValue = Double.parseDouble(getStockValue);
+                            String timestamp = db.getCurrentTimestamp();
+
+
+                            if (db.isnullstocksvalue()) {
+
+                                db.storestocksvalue(stockValue, timestamp,portfolioid);
+
+                            }
+
+
+                            else {
+
+                                int count = db.readportfoliovaluerows(portfolioid);
+
+                               if(count>=0 || count<2){  // set it to  10 later
+
+                                   db.updateStocksValue(portfolioid,stockValue,timestamp);
+
+                               }
+
+
+                            else {
+                                   String currentime= db.getCurrentTimestamp();
+                                   String firsttime=db.readFirstStockTime(portfolioid);
+                                   int datediff;
+                                   datediff=db.difftimestamp(firsttime,currentime);
+//next    if next is not equal to the already present next
+                                   Double newaverage=db.stocksaverage(portfolioid);
+                                   if(!db.findPortfolioid(portfolioid)){
+                                       db.insertnewaverage(newaverage,portfolioid);
+                                   }
+                                   else{
+                                       db.updatenewaverage(portfolioid,newaverage);
+                                   }
+
+                           if(datediff>=1440){
 
 
 
-//                            if (db.readStocksValue()) {
-//                                String getStockValue = firstTimeSeriesDaily.getClose();
-//                                Double stockValue = Double.parseDouble(getStockValue);
-//                                String timestamp = db.getCurrentTimestamp();
-//                                db.storestocksvalue(stockValue, timestamp);
-//                            }
+                                       Double prevaverage;
+                                       prevaverage=db.stocksaverage(portfolioid);
+
+                                       db.updatepreviousaverage(portfolioid,newaverage);
+
+                                       db.deleteStocksValueData(portfolioid);
+
+
+
+
+
+                                       db.updateStocksValue(portfolioid,stockValue,timestamp);
+//                                       Double newstocksaverage;
+//                                       newstocksaverage=db.stocksaverage(portfolioid);
 //
-//
-//                            else {
-//
-//                                    String currentime= db.getCurrentTimestamp();
-//                                    String firsttime=db.readFirstStockTime();
-//                                    int datediff=
-//                                    datediff=db.difftimestamp(firsttime,currentime);
-//
-//                                    if(datediff>=60){
-//
-//                                        // storing data to database
-//                                        String getstockvalue=firstTimeSeriesDaily.getClose();
-//                                        Double stockvalue=Double.parseDouble(getstockvalue);
-//                                        String timestamp  =db.getCurrentTimestamp();
-//                                        db.storestocksvalue(stockvalue,timestamp);
-//                                  }
-//
-//                            }
+//                                       Double profit=newstocksaverage-previousstocksaverage;
+//                                       Double amountinvest;
+
+
+                                   }
+                               }
+
+
+
+
+                            }
 
 
 

@@ -6,18 +6,22 @@ import android.database.Cursor;
 import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.media.MediaCodec;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.net.ConnectException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-public class DatabaseClass extends SQLiteOpenHelper {
+import retrofit2.http.DELETE;
 
+public class DatabaseClass extends SQLiteOpenHelper {
+SQLiteDatabase db;
     private static final String DATABASE_NAME = "INVESTECH";
     private static final int DATABASE_VERSION = 1;
 
@@ -34,158 +38,201 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
         // Create Users table
-        sqLiteDatabase.execSQL("CREATE TABLE Users (" +
-                "Userid INT PRIMARY KEY, " +
-                "Walletid INT, " +
-                "FOREIGN KEY (Walletid) REFERENCES Wallet(Walletid)" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Users (" +
+                "Userid INT PRIMARY KEY " +
+//                "Walletid INT, " +
+//                "FOREIGN KEY (Walletid) REFERENCES Wallet(Walletid)" +
                 ")");
 
 
         // Create AmountHistory table
-        sqLiteDatabase.execSQL("CREATE TABLE AmountHistory (" +
-                "walletid INTEGER PRIMARY KEY, " +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS AmountHistory (" +
+//                "walletid INTEGER PRIMARY KEY, " +
                 "totalamount DOUBLE, " +
-                "day DATETIME , " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                "day DATETIME PRIMARY KEY " +
+//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
                 ")");
 
 
 // Create Wallet table
-        sqLiteDatabase.execSQL("CREATE TABLE Wallet (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Wallet (" +
                 "Walletid INT PRIMARY KEY, " +
                 "totalamount DOUBLE, " +
                 "Created_at TIMESTAMP, " +
                 "PercentageROI FLOAT, " +
                 "Walletlevel INT, " +
-                "StockPortfolio INTEGER, " +
-                "CryptoAsset INTEGER, " +
-                "ForexAsset INTEGER, " +
+//                "StockPortfolio INTEGER, " +
+//                "CryptoAsset INTEGER, " +
+//                "ForexAsset INTEGER, " +
                 "BondsEquities INTEGER, " +
-                "IPOPresence INTEGER, " +
+                "IPOPresence INTEGER " +
 
-                "FOREIGN KEY (StockPortfolio) REFERENCES StockPortfolios(portfolioid), " +
-                "FOREIGN KEY (CryptoAsset) REFERENCES CryptoAsset(cryptoassetid), " +
-                "FOREIGN KEY (ForexAsset) REFERENCES forexasset(fasset_id)" +
+//                "FOREIGN KEY (StockPortfolio) REFERENCES StockPortfolios(portfolioid), " +
+//                "FOREIGN KEY (CryptoAsset) REFERENCES CryptoAsset(cryptoassetid), " +
+//                "FOREIGN KEY (ForexAsset) REFERENCES forexasset(fasset_id)" +
                 ")");
 
 
 
-// Create Transactions table
-        sqLiteDatabase.execSQL("CREATE TABLE Transactions (" +
+ //   Create Transactions table
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Transactions (" +
                 "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "walletid INTEGER, " +
+//                "walletid INTEGER, " +
                 "amount DOUBLE, " +
-                "transactiontime TIME, " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                "transactiontime TIME " +
+//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
                 ")");
 
         // Create PortfolioTransaction table
-        sqLiteDatabase.execSQL("CREATE TABLE PortfolioTransaction (" +
-                "transactionid INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "walletid INTEGER, " +
-                "stockportfolio INTEGER, " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
-                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS PortfolioTransaction (" +
+                "transactionid INTEGER PRIMARY KEY AUTOINCREMENT " +
+//                "walletid INTEGER, " +
+//                "stockportfolio INTEGER, " +
+//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+//                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
                 ")");
 
 
 
 
 // Create StockPortfolios table
-        sqLiteDatabase.execSQL("CREATE TABLE StockPortfolios (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS StockPortfolios (" +
                 "portfolioid INTEGER PRIMARY KEY, " +
                 "portfoliotype TEXT" +
                 ")");
 
 // Create stockslist table
-        sqLiteDatabase.execSQL("CREATE TABLE stockslist (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS stockslist (" +
                 "stockid INTEGER PRIMARY KEY , " +
-                "portfolioid INTEGER, " +
+//                "portfolioid INTEGER, " +
                 "StockName TEXT, " +
-                "Stocksymbol TEXT, " +
-                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
+                "Stocksymbol TEXT " +
+//                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
                 ")");
 
 // Create forexasset table
-        sqLiteDatabase.execSQL("CREATE TABLE forexasset (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS forexasset (" +
                 "fasset_id INTEGER PRIMARY KEY, " +
                 "Forex_asset_name TEXT, " +
                 "time_created TIMESTAMP" +
                 ")");
 
 // Create Currencies table
-        sqLiteDatabase.execSQL("CREATE TABLE Currencies (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Currencies (" +
                 "currencyid INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "forexasset INTEGER, " +
+//                "forexasset INTEGER, " +
                 "currencyname TEXT, " +
-                "currencysymbol TEXT, " +
-                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id)" +
+                "currencysymbol TEXT " +
+//                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id)" +
                 ")");
 
 // Create Customportfolio table
-        sqLiteDatabase.execSQL("CREATE TABLE Customportfolio (" +
-                "portfolioid INTEGER PRIMARY KEY, " +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Customportfolio (" +
+//                "portfolioid INTEGER PRIMARY KEY, " +
                 "StockSymbol VARCHAR(255), " +
                 "Stockquantity FLOAT, " +
                 "purchaseprice FLOAT, " +
-                "purchasedate TIMESTAMP, " +
-                "stockid INTEGER, " +
-                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid), " +
-                "FOREIGN KEY (stockid) REFERENCES stockslist(stockid)" +
+                "purchasedate TIMESTAMP " +
+//                "stockid INTEGER, " +
+//                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid), " +
+//                "FOREIGN KEY (stockid) REFERENCES stockslist(stockid)" +
                 ")");
 
 // Create CryptoAsset table
-        sqLiteDatabase.execSQL("CREATE TABLE CryptoAsset (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS CryptoAsset (" +
                 "cryptoassetid INTEGER PRIMARY KEY, " +
                 "time_created TIMESTAMP" +
                 ")");
 
 // Create Crypto table
-        sqLiteDatabase.execSQL("CREATE TABLE Crypto (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Crypto (" +
                 "cryptoid INTEGER PRIMARY KEY, " +
-                "cryptoassetid INTEGER, " +
-                "cryptosymbol VARCHAR(255), " +
-                "FOREIGN KEY (cryptoassetid) REFERENCES CryptoAsset(cryptoassetid)" +
+//                "cryptoassetid INTEGER, " +
+                "cryptosymbol VARCHAR(255) " +
+//                "FOREIGN KEY (cryptoassetid) REFERENCES CryptoAsset(cryptoassetid)" +
                 ")");
 
 // Create Metals table
-        sqLiteDatabase.execSQL("CREATE TABLE Metals (" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Metals (" +
                 "Metalid INTEGER PRIMARY KEY, " +
                 "MetalSymbol TEXT, " +
                 "MetalPrice REAL" +
                 ")");
 
 // Create UserPortoflio table
-        sqLiteDatabase.execSQL("CREATE TABLE UserPortoflio (" +
-                "walletid INTEGER PRIMARY KEY, " +
-                "stockportfolio INTEGER, " +
-                "presentinstock REAL, " +
-                "cryptoasset INTEGER, " +
-                "presentincrypto REAL, " +
-                "forexasset INTEGER, " +
-                "presentinforex REAL, " +
-                "metalasset INTEGER, " +
-                "presentinmetal REAL, " +
-                "customportfolio INTEGER, " +
-                "presentincustomport REAL, " +
-                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
-                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid), " +
-                "FOREIGN KEY (cryptoasset) REFERENCES CryptoAsset(cryptoassetid), " +
-                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id), " +
-                "FOREIGN KEY (metalasset) REFERENCES Metals(Metalid), " +
-                "FOREIGN KEY (customportfolio) REFERENCES Customportfolio(portfolioid)" +
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS UserPortoflio (" +
+//                "walletid INTEGER PRIMARY KEY, " +
+//                "stockportfolio INTEGER, " +
+                "percentinstock DOUBLE, " +
+//                "cryptoasset INTEGER, " +
+                "percentincrypto DOUBLE, " +
+//                "forexasset INTEGER, " +
+                "percentinforex DOUBLE, " +
+//                "metalasset INTEGER, " +
+                "percentinmetal DOUBLE, " +
+//                "customportfolio INTEGER, " +
+                "percentincustomport DOUBLE " +
+//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+//                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid), " +
+//                "FOREIGN KEY (cryptoasset) REFERENCES CryptoAsset(cryptoassetid), " +
+//                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id), " +
+//                "FOREIGN KEY (metalasset) REFERENCES Metals(Metalid), " +
+//                "FOREIGN KEY (customportfolio) REFERENCES Customportfolio(portfolioid)" +
                 ")");
 
 
 
         sqLiteDatabase.execSQL("CREATE TABLE STOCKSVALUES ("+
 
-                "rowid INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "stockvalue DOUBLE, " +
-                "timestamp TIMESTAMP" +
+
+                 "stockvalue DOUBLE, " +
+                "timestamp TIMESTAMP," +
+                 "portfolioid INTEGER PRIMARY KEY ," +
+                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
                 ")"
                 );
 
+
+        sqLiteDatabase.execSQL("CREATE TABLE PORTFOLIOSAVERAGE ("+
+
+
+                "previousaverage DOUBLE, " +
+                "newaverage DOUBLE," +
+                "portfolioid INTEGER PRIMARY KEY" +
+                ")"
+        );
+
+
+
+
+        // Adding foreign key columns using ALTER TABLE
+        sqLiteDatabase.execSQL("ALTER TABLE Users ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+        sqLiteDatabase.execSQL("ALTER TABLE AmountHistory ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+        sqLiteDatabase.execSQL("ALTER TABLE Transactions ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+
+        sqLiteDatabase.execSQL("ALTER TABLE PortfolioTransaction ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+        sqLiteDatabase.execSQL("ALTER TABLE PortfolioTransaction ADD COLUMN stockportfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
+        sqLiteDatabase.execSQL("ALTER TABLE stockslist ADD COLUMN portfolioid INTEGER REFERENCES StockPortfolios(portfolioid)");
+
+        sqLiteDatabase.execSQL("ALTER TABLE Wallet ADD COLUMN StockPortfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
+        sqLiteDatabase.execSQL("ALTER TABLE Wallet ADD COLUMN ForexAsset INTEGER REFERENCES forexasset(fasset_id)");
+        sqLiteDatabase.execSQL("ALTER TABLE Wallet ADD COLUMN CryptoAsset INTEGER REFERENCES CryptoAsset(cryptoassetid)");
+
+
+
+        sqLiteDatabase.execSQL("ALTER TABLE Currencies ADD COLUMN forexasset INTEGER REFERENCES forexasset(fasset_id)");
+        sqLiteDatabase.execSQL("ALTER TABLE Customportfolio ADD COLUMN stockid INTEGER REFERENCES stockslist(stockid)");
+        sqLiteDatabase.execSQL("ALTER TABLE Customportfolio ADD COLUMN Portfolioid INTEGER REFERENCES StockPortfolios(portfolioid)");
+        sqLiteDatabase.execSQL("ALTER TABLE Crypto ADD COLUMN cryptoassetid INTEGER REFERENCES CryptoAsset(cryptoassetid)");
+
+
+
+        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Stockportfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
+        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Cryptoasset INTEGER REFERENCES CryptoAsset(cryptoassetid)");
+        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Forexasset INTEGER REFERENCES forexasset(fasset_id)");
+        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Metalasset INTEGER REFERENCES Metals(Metalid)");
+    //    sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Customportfolio INTEGER REFERENCES Customportfolio(Portfolioid)");
 
 
 
@@ -198,17 +245,14 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     }
 
-//    @Override
-//    public void onConfigure(SQLiteDatabase db) {
-//        super.onConfigure(db);
-//        db.setForeignKeyConstraintsEnabled(true);
-//    }
 
-//    @Override
-//    public void onOpen(SQLiteDatabase db) {
-//        super.onOpen(db);
-//        db.execSQL("PRAGMA foreign_keys=ON;");
-//    }
+    @Override
+    public void onOpen(SQLiteDatabase db) {
+        super.onOpen(db);
+        db.execSQL("PRAGMA foreign_keys=ON;");
+    }
+
+
 
 
 
@@ -217,21 +261,22 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
 
+
         // Drop all tables if exist
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Users");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Wallet");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Transactions");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS StockPortfolios");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stockslist");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS forexasset");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Currencies");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Customportfolio");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS CryptoAsset");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Crypto");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Metals");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Users");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Wallet");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Transactions");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS StockPortfolios");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stockslist");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS forexasset");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Currencies");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Customportfolio");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS CryptoAsset");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Crypto");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Metals");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
+//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS STOCKVALUES");
 
 
@@ -535,7 +580,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public ArrayList<CompanyData> readingStockslist(int startIndex) {
 
         SQLiteDatabase db = this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+
 
 
         Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 2 OFFSET " + startIndex, null);
@@ -571,28 +616,30 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
 
-    public void adduserid(String userid){
+    public void adduserid(String userid,String walletid){
         SQLiteDatabase db=this.getWritableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+
         ContentValues cv=new ContentValues();
 
         cv.put("Userid",userid);
+        cv.put("Walletid",walletid);
 
         db.insert("Users",null,cv);
     }
 
 
 
-  public void addamount(double amount,String timestamp){
-        SQLiteDatabase db=this.getWritableDatabase();
-//      db.setForeignKeyConstraintsEnabled(true);
-        ContentValues cv= new ContentValues();
-        cv.put("totalamount",amount);
-        cv.put("day",timestamp);
-        db.insert("AmountHistory",null,cv);
-
-
-  }
+//  public void addamount(double amount,String timestamp,String walletid){
+//        SQLiteDatabase db=this.getWritableDatabase();
+//
+//        ContentValues cv= new ContentValues();
+//        cv.put("totalamount",amount);
+//        cv.put("day",timestamp);
+//        cv.put("Walletid",walletid);
+//        db.insert("AmountHistory",null,cv);
+//
+//
+//  }
 
     // Function to get the current timestamp
     public String getCurrentTimestamp() {
@@ -600,20 +647,12 @@ public class DatabaseClass extends SQLiteOpenHelper {
         return sdf.format(new Date());
     }
 
-    public void storewalletid(String walletid,String timestamp,Double totalAmount){
-        SQLiteDatabase db=this.getWritableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        ContentValues cv=new ContentValues();
-        cv.put("Walletid",walletid);
-        cv.put("Created_at",timestamp);
-        cv.put("totalamount",totalAmount);
 
-        db.insert("Wallet",null,cv);
-    }
+
 
     public boolean readwallet(){
         SQLiteDatabase db=this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+
         Cursor cursor=db.rawQuery("SELECT Walletid FROM Wallet ",null);
 
         if(cursor != null && cursor.moveToFirst()){
@@ -634,7 +673,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
     public boolean readuser(){
         SQLiteDatabase db=this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+
         Cursor cursor=db.rawQuery("SELECT Userid FROM Users ",null);
 
         if(cursor != null && cursor.moveToFirst()){
@@ -653,66 +692,119 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
 
-    public Double totalamount(){
-        SQLiteDatabase db=this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        Cursor cursor= db.rawQuery("SELECT SUM(totalamount) FROM AmountHistory",null);
-        Double sum = 0.0;
-        if (cursor != null && cursor.moveToFirst()) {
-            sum = cursor.getDouble(0); // Retrieves the value of the first column in the result set (SUM(totalamount))
-            cursor.close();
-        }
 
-        return sum;
+    public void addWalletid(String walletid,Double totalAmount){
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        ContentValues cv=new ContentValues();
+        cv.put("Walletid",walletid);
+//        cv.put("Created_at",timestamp);
+        cv.put("totalamount",totalAmount);
+
+        db.insert("Wallet",null,cv);
     }
 
 
 
-    public void storetransactions(Double amountinvest,String Transactiontime){
+    public void updatewalletamount(Double Totalamount){
         SQLiteDatabase db=this.getWritableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+        db.execSQL("UPDATE Wallet SET totalamount= " +  Totalamount  );
+
+    }
+
+
+
+
+    public Double readwalletamount(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor= db.rawQuery("SELECT totalamount FROM Wallet ",null);
+        if(cursor!=null && cursor.moveToFirst()){
+             Double totalamount=cursor.getDouble(0);
+             return totalamount;
+        }
+        return null;
+    }
+
+
+
+    public void storetransactions(Double amountinvest,String Transactiontime,String walletid){
+        SQLiteDatabase db=this.getWritableDatabase();
+
         ContentValues cv= new ContentValues();
         cv.put("transactiontime",Transactiontime);
         cv.put("amount",amountinvest);
+        cv.put("Walletid",walletid);
         db.insert("Transactions",null,cv);
     }
 
     //storing stocks values
-    public  void storestocksvalue(Double Stockvalue,String Timestamp){
-        SQLiteDatabase db=this.getWritableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        ContentValues cv=new ContentValues();
-        cv.put("stockvalue",Stockvalue);
-        cv.put("timestamp",Timestamp);
-        db.insert("STOCKSVALUES",null,cv);
-    }
+
 
     //getting average of stocks values
-    public void stocksaverage(){
+    public Double stocksaverage(int Portfolioid){
         SQLiteDatabase db=this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        Cursor cursor= db.rawQuery("SELECT AVG(stockvalue) FROM STOCKSVALUES ",null);
+
+        Cursor cursor= db.rawQuery("SELECT AVG(stockvalue) FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
         Double avgstocks;
         if(cursor!=null && cursor.moveToFirst()){
             avgstocks=cursor.getDouble(0);
+            return avgstocks;
         }
+        return null;
     }
 
 
-    public boolean readStocksValue() {
+    public boolean isnullstocksvalue() {
         SQLiteDatabase db = this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM STOCKSVALUES", null);
+
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM STOCKSVALUES ", null);
 
         if (cursor != null && cursor.moveToFirst()) {
             int count = cursor.getInt(0);
             cursor.close();
-            return (count >=0 && count <=10); // Returns true if the table is empty
+            return (count ==0 ); //set it to 10 later
         }
 
         return false; // Cursor is null or an error occurred
     }
 
+    public int readportfoliovaluerows(int Portfolioid){
+        SQLiteDatabase db= this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM STOCKSVALUES WHERE portfolioid='Portfolioid'", null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return count;
+        }
+         return 0;
+
+    }
+
+
+
+    public String fetchwalletid(){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT walletid FROM Wallet LIMIT 1",null);
+        String walletid;
+        if(cursor!=null && cursor.moveToFirst()){
+             walletid=cursor.getString(0);
+             return walletid;
+        }
+        return null;
+    }
+
+
+    public void adduserportfolio(int portfolioID,String walletid,Double percentinstock){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put("stockportfolio",portfolioID);
+        cv.put("Walletid",walletid);
+        cv.put("percentinstock",percentinstock);
+
+        db.insert("UserPortoflio",null,cv);
+
+    }
 
 
 
@@ -720,10 +812,15 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
 
-    public String readFirstStockTime() {
+
+
+
+
+
+    public String readFirstStockTime(int Portfolioid) {
         SQLiteDatabase db = this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
-        Cursor cursor = db.rawQuery("SELECT timestamp FROM STOCKSVALUES ORDER BY timestamp ASC LIMIT 1", null);
+
+        Cursor cursor = db.rawQuery("SELECT timestamp FROM STOCKSVALUES WHERE portfolioid = 'Portfolioid' ORDER BY timestamp ASC LIMIT 1", null);
 
         if (cursor != null && cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndex("timestamp");
@@ -739,7 +836,11 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
 
+    public void deleteStocksValueData(int Portfolioid){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("DELETE FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
 
+    }
 
 
 
@@ -751,7 +852,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
         int differenceInMinutes = 0;
 
         SQLiteDatabase db = this.getReadableDatabase();
-//        db.setForeignKeyConstraintsEnabled(true);
+
 
         // Fetch the timestamps in seconds and then calculate the difference
         Cursor cursor = db.rawQuery(
@@ -771,6 +872,112 @@ public class DatabaseClass extends SQLiteOpenHelper {
     }
 
 
+
+
+    public boolean readStocksValue(int Portfolioid){
+
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT portfolioid FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int count = cursor.getInt(0);
+            cursor.close();
+            return (count >=0 && count <=2);    //set upper limit to 10
+        }
+
+        return false; // Cursor is null or an error occurred
+
+
+    }
+
+
+
+    //storing stocks values
+    public void storestocksvalue(Double Stockvalue,String Timestamp,int Portfolioid){   //when the table is null
+        SQLiteDatabase db=this.getWritableDatabase();
+
+        ContentValues cv=new ContentValues();
+        cv.put("stockvalue",Stockvalue);
+        cv.put("timestamp",Timestamp);
+        cv.put("portfolioid",Portfolioid);
+        db.insert("STOCKSVALUES",null,cv);
+    }
+
+
+    public void updateStocksValue(int Portfolioid, Double Stockvalue, String timestamp) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("portfolioid", Portfolioid);
+        values.put("stockvalue", Stockvalue);
+        values.put("timestamp", timestamp);
+
+        db.insert("STOCKSVALUES", null, values);
+    }
+
+
+
+
+
+    public void readpreviousaverage(int Portfolioid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("SELECT previousaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
+        if(cursor.moveToFirst()){
+
+        }
+    }
+
+    public void readnewaverage(int Portfolioid){
+        SQLiteDatabase db=this.getReadableDatabase();
+        Cursor cursor=db.rawQuery("SELECT newaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
+        if(cursor.moveToFirst()){
+
+        }
+    }
+
+
+
+    public void updatepreviousaverage(int Portfolioid,Double prevaverage){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("UPDATE PORTFOLIOSAVERAGE SET previousaverage='prevaverage' WHERE portfolioid='Portfolioid'");
+    }
+
+
+
+
+    public void updatenewaverage(int Portfolioid,Double newvaverage){
+        SQLiteDatabase db=this.getWritableDatabase();
+        db.execSQL("UPDATE PORTFOLIOSAVERAGE SET newaverage='newvaverage' WHERE portfolioid='Portfolioid'");
+    }
+
+
+
+
+    public boolean findPortfolioid(int Portfolioid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT portfolioid FROM PORTFOLIOSAVERAGE WHERE portfolioid=?", new String[]{String.valueOf(Portfolioid)});
+
+        if (cursor.moveToFirst()) {
+            if (Portfolioid == cursor.getInt(0)) {
+                cursor.close(); // Close the cursor when done
+                return true;
+            } else {
+                cursor.close(); // Close the cursor when done
+                return false;
+            }
+        } else {
+            cursor.close(); // Close the cursor when done
+            return false; // Return false if no matching record is found
+        }
+    }
+
+
+    public void insertnewaverage(Double newAverage , int Portfolioid){
+        SQLiteDatabase db=this.getWritableDatabase();
+        ContentValues cv= new ContentValues();
+        cv.put("newaverage",newAverage);
+        cv.put("portfolioid",Portfolioid);
+        db.insert("PORTFOLIOSAVERAGE",null,cv);
+    }
 
 
 
