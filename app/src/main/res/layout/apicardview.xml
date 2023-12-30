@@ -4,19 +4,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:background="@drawable/borderdata_background"
+
+    android:layout_margin="5dp"
+
     android:padding="16dp">
 
     <TextView
         android:id="@+id/companyNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Company Name: " />
+        android:text="Company: "
+        android:textSize="15sp"
+        android:textColor="#449FE4"/>
 
     <TextView
         android:id="@+id/companySymbolTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Symbol: " />
+        android:text="Symbol: "
+        android:textSize="15sp"
+        android:textColor="#449FE4"/>
 
 
 
@@ -24,7 +32,9 @@
         android:id="@+id/closeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Close: " />
+        android:text="Close: "
+        android:textSize="15sp"
+        android:textColor="#449FE4"/>
 
 
 

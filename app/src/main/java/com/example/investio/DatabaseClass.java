@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.net.ConnectException;
+import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -182,15 +183,15 @@ SQLiteDatabase db;
 
 
 
-        sqLiteDatabase.execSQL("CREATE TABLE STOCKSVALUES ("+
-
-
-                 "stockvalue DOUBLE, " +
-                "timestamp TIMESTAMP," +
-                 "portfolioid INTEGER PRIMARY KEY ," +
-                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
-                ")"
-                );
+//        sqLiteDatabase.execSQL("CREATE TABLE STOCKSVALUES ("+
+//
+//
+//                 "stockvalue DOUBLE, " +
+//                "timestamp TIMESTAMP," +
+//                 "portfolioid INTEGER PRIMARY KEY ," +
+//                "FOREIGN KEY (portfolioid) REFERENCES StockPortfolios(portfolioid)" +
+//                ")"
+//                );
 
 
         sqLiteDatabase.execSQL("CREATE TABLE PORTFOLIOSAVERAGE ("+
@@ -583,7 +584,7 @@ SQLiteDatabase db;
 
 
 
-        Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 2 OFFSET " + startIndex, null);
+        Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 10 OFFSET " + startIndex, null);
 
         ArrayList<CompanyData> companyDataList = new ArrayList<>();
 

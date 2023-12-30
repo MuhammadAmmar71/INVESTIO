@@ -125,14 +125,14 @@ public class HealthUSAStocks extends AppCompatActivity {
         List<String> symbols = new ArrayList<>();
         symbols.add("JNJ");
         symbols.add("UNH");
-//        symbols.add("PFE");
-//        symbols.add("MRK");
-//        symbols.add("ABT");
-//        symbols.add("AMGN");
-//        symbols.add("TMO");
-//        symbols.add("MDT");
-//        symbols.add("GILD");
-//        symbols.add("BMY");
+        symbols.add("PFE");
+        symbols.add("MRK");
+        symbols.add("ABT");
+        symbols.add("AMGN");
+        symbols.add("TMO");
+        symbols.add("MDT");
+        symbols.add("GILD");
+        symbols.add("BMY");
 // Fetch data from the API
 
 
@@ -188,60 +188,60 @@ public class HealthUSAStocks extends AppCompatActivity {
                             // Update the CompanyData object with data from the API
                             companyData.setClose(firstTimeSeriesDaily.getClose());
 
-                            //preparing data to store into portfolio table
-                            String getStockValue = firstTimeSeriesDaily.getClose();
-                            Double stockValue = Double.parseDouble(getStockValue);
-                            String timestamp = db.getCurrentTimestamp();
-
-
-                            if (db.isnullstocksvalue()) {
-
-                                db.storestocksvalue(stockValue, timestamp,portfolioid);
-
-                            }
-
-
-                            else {
-
-                                int count = db.readportfoliovaluerows(portfolioid);
-
-                               if(count>=0 || count<2){  // set it to  10 later
-
-                                   db.updateStocksValue(portfolioid,stockValue,timestamp);
-
-                               }
-
-
-                            else {
-                                   String currentime= db.getCurrentTimestamp();
-                                   String firsttime=db.readFirstStockTime(portfolioid);
-                                   int datediff;
-                                   datediff=db.difftimestamp(firsttime,currentime);
-//next    if next is not equal to the already present next
-                                   Double newaverage=db.stocksaverage(portfolioid);
-                                   if(!db.findPortfolioid(portfolioid)){
-                                       db.insertnewaverage(newaverage,portfolioid);
-                                   }
-                                   else{
-                                       db.updatenewaverage(portfolioid,newaverage);
-                                   }
-
-                           if(datediff>=1440){
-
-
-
-                                       Double prevaverage;
-                                       prevaverage=db.stocksaverage(portfolioid);
-
-                                       db.updatepreviousaverage(portfolioid,newaverage);
-
-                                       db.deleteStocksValueData(portfolioid);
-
-
-
-
-
-                                       db.updateStocksValue(portfolioid,stockValue,timestamp);
+//                            //preparing data to store into portfolio table
+//                            String getStockValue = firstTimeSeriesDaily.getClose();
+//                            Double stockValue = Double.parseDouble(getStockValue);
+//                            String timestamp = db.getCurrentTimestamp();
+//
+//
+//                            if (db.isnullstocksvalue()) {
+//
+//                                db.storestocksvalue(stockValue, timestamp,portfolioid);
+//
+//                            }
+//
+//
+//                            else {
+//
+//                                int count = db.readportfoliovaluerows(portfolioid);
+//
+//                               if(count>=0 || count<2){  // set it to  10 later
+//
+//                                   db.updateStocksValue(portfolioid,stockValue,timestamp);
+//
+//                               }
+//
+//
+//                            else {
+//                                   String currentime= db.getCurrentTimestamp();
+//                                   String firsttime=db.readFirstStockTime(portfolioid);
+//                                   int datediff;
+//                                   datediff=db.difftimestamp(firsttime,currentime);
+////next    if next is not equal to the already present next
+//                                   Double newaverage=db.stocksaverage(portfolioid);
+//                                   if(!db.findPortfolioid(portfolioid)){
+//                                       db.insertnewaverage(newaverage,portfolioid);
+//                                   }
+//                                   else{
+//                                       db.updatenewaverage(portfolioid,newaverage);
+//                                   }
+//
+//                           if(datediff>=1440){
+//
+//
+//
+//                                       Double prevaverage;
+//                                       prevaverage=db.stocksaverage(portfolioid);
+//
+//                                       db.updatepreviousaverage(portfolioid,newaverage);
+//
+//                                       db.deleteStocksValueData(portfolioid);
+//
+//
+//
+//
+//
+//                                       db.updateStocksValue(portfolioid,stockValue,timestamp);
 //                                       Double newstocksaverage;
 //                                       newstocksaverage=db.stocksaverage(portfolioid);
 //
@@ -249,13 +249,13 @@ public class HealthUSAStocks extends AppCompatActivity {
 //                                       Double amountinvest;
 
 
-                                   }
-                               }
+//                                   }
+//                               }
 
 
 
-
-                            }
+//
+//                            }
 
 
 

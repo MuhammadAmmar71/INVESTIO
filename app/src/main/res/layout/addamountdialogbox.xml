@@ -1,46 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="300dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#03A9F4"
-    android:layout_margin="21dp"
-    >
+    app:cardElevation="10dp"
+    app:cardBackgroundColor="#fff"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="10dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/txt"
-        android:layout_margin="21dp"
-        android:text="Add amount"
-        android:textStyle="bold"
-        android:textAllCaps="true"
-        android:textSize="27dp"
-        android:textColor="#fff"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
 
+        >
 
-        />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtwallet"
+            android:layout_margin="21dp"
+            android:text="Wallet"
+            android:textStyle="italic"
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="61dp"
-        android:ems="18"
-        android:hint=" Enter the amount "
-        android:id="@+id/edtamount"
-        android:layout_margin="21dp"
-        android:background="#fff"
-        />
+            android:textSize="27dp"
+            android:textColor="@color/blueapp"
 
 
+            />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="save"
-        android:id="@+id/btnSave"
-        android:layout_margin="21dp"
-        />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="61dp"
+            android:ems="15"
+            android:hint=" Enter the amount "
+
+            android:id="@+id/edtamountwallet"
+            android:layout_margin="21dp"
+            android:background="@drawable/borderdata_background"
+
+            />
 
 
-</LinearLayout>
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Add amount"
+            android:textColor="#fff"
+            android:id="@+id/btnaddamount"
+            android:layout_marginLeft="130dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/roundbutton"
+
+            />
+
+    </LinearLayout>
+
+
+</androidx.cardview.widget.CardView>

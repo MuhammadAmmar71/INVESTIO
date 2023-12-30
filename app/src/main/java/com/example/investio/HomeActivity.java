@@ -1,6 +1,7 @@
 package com.example.investio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,7 +33,11 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
     MainUiParentAdapter parentAdapt;
 
     TextView txtuserid;
-    FloatingActionButton btnfloat;
+//    FloatingActionButton btnfloat;
+
+
+    CardView walletcard;
+    TextView amountwallet;
 
 //    GoogleSignInOptions gso;
 //    GoogleSignInClient gsc;
@@ -45,15 +50,23 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        walletcard=findViewById(R.id.walletcardview);
+
+
         DatabaseClass db= new DatabaseClass(this);
 
         btnlogout = findViewById(R.id.btnlogout);
 
+       amountwallet=findViewById(R.id.txtamountwallet);
+
         recview = findViewById(R.id.rvparent);
 
-        txtuserid=findViewById(R.id.txtuserid);
+//        txtuserid=findViewById(R.id.txtuserid);
+//
+//        btnfloat=findViewById(R.id.btnfloat);
 
-        btnfloat=findViewById(R.id.btnfloat);
+
+
 
 
 
@@ -64,9 +77,9 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         crypto = new ArrayList<>();
         forex = new ArrayList<>();
 
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.tech));
+        stocks.add(new MainUiChildModelClass(R.drawable.health));
+        stocks.add(new MainUiChildModelClass(R.drawable.education));
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
         stocks.add(new MainUiChildModelClass(R.drawable.graph));
@@ -78,6 +91,36 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
 
         parentModelClassArrayList.add(new MainUiParentModelClass(stocks));
+
+
+
+        crypto.add(new MainUiChildModelClass(R.drawable.ethereum));
+        crypto.add(new MainUiChildModelClass(R.drawable.bitcoin));
+        crypto.add(new MainUiChildModelClass(R.drawable.dodgecoin));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+
+
+
+        parentModelClassArrayList.add(new MainUiParentModelClass(crypto));
+
+        forex.add(new MainUiChildModelClass(R.drawable.riyaal));
+        forex.add(new MainUiChildModelClass(R.drawable.pound));
+        forex.add(new MainUiChildModelClass(R.drawable.euro));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+
+
+        parentModelClassArrayList.add(new MainUiParentModelClass(forex));
 
 
         parentAdapt = new MainUiParentAdapter(parentModelClassArrayList, this);
@@ -107,18 +150,20 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
             generatewalletid(db);
         }
 
+        // Before showing the dialog, get the initial wallet amount and display it
+        Double initialWalletAmount = db.readwalletamount();
+        amountwallet.setText(String.valueOf(initialWalletAmount));
 
-
-btnfloat.setOnClickListener(new View.OnClickListener() {
+walletcard.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onClick(View view) {
 
         Dialog dialog =new Dialog(HomeActivity.this);
         dialog.setContentView(R.layout.addamountdialogbox);
 
-        EditText edtamount=dialog.findViewById(R.id.edtamount);
+        EditText edtamount=dialog.findViewById(R.id.edtamountwallet);
 
-        Button   btnSave=dialog.findViewById(R.id.btnSave);
+        Button   btnSave=dialog.findViewById(R.id.btnaddamount);
 
         btnSave.setOnClickListener(new View.OnClickListener() {
 
@@ -131,9 +176,14 @@ btnfloat.setOnClickListener(new View.OnClickListener() {
              String timestamp=db.getCurrentTimestamp();
 
              Double previousamount = db.readwalletamount();
-                Double totalamount=newamount + previousamount;
+             Double  totalamount=newamount + previousamount; // HERE WE GET OUR WALLET AMOUNT
+
+
+
+
                 db.updatewalletamount(totalamount);
 
+                amountwallet.setText(totalamount.toString());
                 dialog.dismiss();
 
 
@@ -351,31 +401,3 @@ btnfloat.setOnClickListener(new View.OnClickListener() {
 
 
 
-
-
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//
-//
-//        parentModelClassArrayList.add(new MainUiParentModelClass(crypto));
-//
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//
-//
-//        parentModelClassArrayList.add(new MainUiParentModelClass(forex));

@@ -9,4 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="green">#17804E</color>
 
+
+    <color name="blueapp">#449FE4</color>
+    <color name="redapp">#FF5A3D</color>
+    <color name="greenapp">#25C881</color>
+
 </resources>

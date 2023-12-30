@@ -7,6 +7,6 @@ import retrofit2.http.Query;
 public interface JSONPlaceholderApi {
 
 
-    @GET("query?function=TIME_SERIES_DAILY&outputsize=full&apikey=Y3FY53X742HFLF11")
+    @GET("query?function=TIME_SERIES_DAILY&outputsize=full&apikey=RRN07H4U1EXZCVGZ")
     Call<ApiResponse> getApiResponse(@Query("symbol") String symbol);
 }
