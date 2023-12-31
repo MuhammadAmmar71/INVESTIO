@@ -35,6 +35,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
     TextView txtuserid;
 //    FloatingActionButton btnfloat;
 
+    CardView btntransachistory;
 
     CardView walletcard;
     TextView amountwallet;
@@ -46,12 +47,15 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
     TextView btnlogout;
 
+    CardView btnUserPortfolio;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         walletcard=findViewById(R.id.walletcardview);
 
+        btntransachistory=findViewById(R.id.btntransachistory);
 
         DatabaseClass db= new DatabaseClass(this);
 
@@ -65,7 +69,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 //
 //        btnfloat=findViewById(R.id.btnfloat);
 
-
+        btnUserPortfolio=findViewById(R.id.btnUserPortfolio);
 
 
 
@@ -195,6 +199,23 @@ walletcard.setOnClickListener(new View.OnClickListener() {
     }
 });
 
+
+
+
+
+btntransachistory.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        startActivity(new Intent(getApplicationContext(),TransactionsHistory.class));
+    }
+});
+
+btnUserPortfolio.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+        startActivity(new Intent(getApplicationContext(),UserPortfolio.class));
+    }
+});
 
 
     }

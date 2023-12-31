@@ -7,6 +7,7 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.media.MediaCodec;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,12 +18,13 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import retrofit2.http.DELETE;
 
 public class DatabaseClass extends SQLiteOpenHelper {
-SQLiteDatabase db;
+    SQLiteDatabase db;
     private static final String DATABASE_NAME = "INVESTECH";
     private static final int DATABASE_VERSION = 1;
 
@@ -35,7 +37,6 @@ SQLiteDatabase db;
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-
 
 
         // Create Users table
@@ -74,14 +75,13 @@ SQLiteDatabase db;
                 ")");
 
 
-
- //   Create Transactions table
+        //   Create Transactions table
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS Transactions (" +
                 "transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                "walletid INTEGER, " +
+                "walletid INTEGER, " +
                 "amount DOUBLE, " +
-                "transactiontime TIME " +
-//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
+                "transactiontime TEXT, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid)" +
                 ")");
 
         // Create PortfolioTransaction table
@@ -92,8 +92,6 @@ SQLiteDatabase db;
 //                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
 //                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid)" +
                 ")");
-
-
 
 
 // Create StockPortfolios table
@@ -162,8 +160,8 @@ SQLiteDatabase db;
 
 // Create UserPortoflio table
         sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS UserPortoflio (" +
-//                "walletid INTEGER PRIMARY KEY, " +
-//                "stockportfolio INTEGER, " +
+                "walletid TEXT PRIMARY KEY, " +
+                "stockportfolio INTEGER, " +
                 "percentinstock DOUBLE, " +
 //                "cryptoasset INTEGER, " +
                 "percentincrypto DOUBLE, " +
@@ -172,15 +170,14 @@ SQLiteDatabase db;
 //                "metalasset INTEGER, " +
                 "percentinmetal DOUBLE, " +
 //                "customportfolio INTEGER, " +
-                "percentincustomport DOUBLE " +
-//                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
-//                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid), " +
+                "percentincustomport DOUBLE, " +
+                "FOREIGN KEY (walletid) REFERENCES Wallet(Walletid), " +
+                "FOREIGN KEY (stockportfolio) REFERENCES StockPortfolios(portfolioid) " +
 //                "FOREIGN KEY (cryptoasset) REFERENCES CryptoAsset(cryptoassetid), " +
 //                "FOREIGN KEY (forexasset) REFERENCES forexasset(fasset_id), " +
 //                "FOREIGN KEY (metalasset) REFERENCES Metals(Metalid), " +
 //                "FOREIGN KEY (customportfolio) REFERENCES Customportfolio(portfolioid)" +
                 ")");
-
 
 
 //        sqLiteDatabase.execSQL("CREATE TABLE STOCKSVALUES ("+
@@ -194,7 +191,7 @@ SQLiteDatabase db;
 //                );
 
 
-        sqLiteDatabase.execSQL("CREATE TABLE PORTFOLIOSAVERAGE ("+
+        sqLiteDatabase.execSQL("CREATE TABLE PORTFOLIOSAVERAGE (" +
 
 
                 "previousaverage DOUBLE, " +
@@ -204,12 +201,10 @@ SQLiteDatabase db;
         );
 
 
-
-
         // Adding foreign key columns using ALTER TABLE
         sqLiteDatabase.execSQL("ALTER TABLE Users ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
         sqLiteDatabase.execSQL("ALTER TABLE AmountHistory ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
-        sqLiteDatabase.execSQL("ALTER TABLE Transactions ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+//        sqLiteDatabase.execSQL("ALTER TABLE Transactions ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
 
         sqLiteDatabase.execSQL("ALTER TABLE PortfolioTransaction ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
         sqLiteDatabase.execSQL("ALTER TABLE PortfolioTransaction ADD COLUMN stockportfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
@@ -220,22 +215,18 @@ SQLiteDatabase db;
         sqLiteDatabase.execSQL("ALTER TABLE Wallet ADD COLUMN CryptoAsset INTEGER REFERENCES CryptoAsset(cryptoassetid)");
 
 
-
         sqLiteDatabase.execSQL("ALTER TABLE Currencies ADD COLUMN forexasset INTEGER REFERENCES forexasset(fasset_id)");
         sqLiteDatabase.execSQL("ALTER TABLE Customportfolio ADD COLUMN stockid INTEGER REFERENCES stockslist(stockid)");
         sqLiteDatabase.execSQL("ALTER TABLE Customportfolio ADD COLUMN Portfolioid INTEGER REFERENCES StockPortfolios(portfolioid)");
         sqLiteDatabase.execSQL("ALTER TABLE Crypto ADD COLUMN cryptoassetid INTEGER REFERENCES CryptoAsset(cryptoassetid)");
 
 
-
-        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
-        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Stockportfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
-        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Cryptoasset INTEGER REFERENCES CryptoAsset(cryptoassetid)");
-        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Forexasset INTEGER REFERENCES forexasset(fasset_id)");
-        sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Metalasset INTEGER REFERENCES Metals(Metalid)");
-    //    sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Customportfolio INTEGER REFERENCES Customportfolio(Portfolioid)");
-
-
+      //  sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Walletid INTEGER REFERENCES Wallet(Walletid)");
+      //  sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Stockportfolio INTEGER REFERENCES StockPortfolios(portfolioid)");
+      //  sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Cryptoasset INTEGER REFERENCES CryptoAsset(cryptoassetid)");
+      // sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Forexasset INTEGER REFERENCES forexasset(fasset_id)");
+      //  sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Metalasset INTEGER REFERENCES Metals(Metalid)");
+  // here it gives error while compiling      //    sqLiteDatabase.execSQL("ALTER TABLE UserPortoflio ADD COLUMN Customportfolio INTEGER REFERENCES Customportfolio(Portfolioid)");
 
 
         // Populate stockslist table method call
@@ -254,13 +245,8 @@ SQLiteDatabase db;
     }
 
 
-
-
-
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
 
 
         // Drop all tables if exist
@@ -279,7 +265,6 @@ SQLiteDatabase db;
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
 //        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS STOCKVALUES");
-
 
 
         // Recreate all tables
@@ -583,7 +568,6 @@ SQLiteDatabase db;
         SQLiteDatabase db = this.getReadableDatabase();
 
 
-
         Cursor cursor = db.rawQuery("SELECT * FROM stockslist LIMIT 10 OFFSET " + startIndex, null);
 
         ArrayList<CompanyData> companyDataList = new ArrayList<>();
@@ -617,17 +601,16 @@ SQLiteDatabase db;
     }
 
 
-    public void adduserid(String userid,String walletid){
-        SQLiteDatabase db=this.getWritableDatabase();
+    public void adduserid(String userid, String walletid) {
+        SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues cv=new ContentValues();
+        ContentValues cv = new ContentValues();
 
-        cv.put("Userid",userid);
-        cv.put("Walletid",walletid);
+        cv.put("Userid", userid);
+        cv.put("Walletid", walletid);
 
-        db.insert("Users",null,cv);
+        db.insert("Users", null, cv);
     }
-
 
 
 //  public void addamount(double amount,String timestamp,String walletid){
@@ -649,106 +632,85 @@ SQLiteDatabase db;
     }
 
 
+    public boolean readwallet() {
+        SQLiteDatabase db = this.getReadableDatabase();
 
+        Cursor cursor = db.rawQuery("SELECT Walletid FROM Wallet ", null);
 
-    public boolean readwallet(){
-        SQLiteDatabase db=this.getReadableDatabase();
-
-        Cursor cursor=db.rawQuery("SELECT Walletid FROM Wallet ",null);
-
-        if(cursor != null && cursor.moveToFirst()){
-            if (!cursor.isNull(0)){
-                 return true;
-
-            }
-            else {
-                  return false;
-            }
-
-        }
-        else {
-            return false;
-        }
-    }
-
-
-    public boolean readuser(){
-        SQLiteDatabase db=this.getReadableDatabase();
-
-        Cursor cursor=db.rawQuery("SELECT Userid FROM Users ",null);
-
-        if(cursor != null && cursor.moveToFirst()){
-            if (!cursor.isNull(0)){
+        if (cursor != null && cursor.moveToFirst()) {
+            if (!cursor.isNull(0)) {
                 return true;
 
-            }
-            else {
+            } else {
                 return false;
             }
 
-        }
-        else {
+        } else {
             return false;
         }
     }
 
 
+    public boolean readuser() {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-    public void addWalletid(String walletid,Double totalAmount){
-        SQLiteDatabase db=this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Userid FROM Users ", null);
 
-        ContentValues cv=new ContentValues();
-        cv.put("Walletid",walletid);
+        if (cursor != null && cursor.moveToFirst()) {
+            if (!cursor.isNull(0)) {
+                return true;
+
+            } else {
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+    }
+
+
+    public void addWalletid(String walletid, Double totalAmount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues cv = new ContentValues();
+        cv.put("Walletid", walletid);
 //        cv.put("Created_at",timestamp);
-        cv.put("totalamount",totalAmount);
+        cv.put("totalamount", totalAmount);
 
-        db.insert("Wallet",null,cv);
+        db.insert("Wallet", null, cv);
     }
 
 
-
-    public void updatewalletamount(Double Totalamount){
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL("UPDATE Wallet SET totalamount= " +  Totalamount  );
+    public void updatewalletamount(Double Totalamount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("UPDATE Wallet SET totalamount= " + Totalamount);
 
     }
 
 
-
-
-    public Double readwalletamount(){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor= db.rawQuery("SELECT totalamount FROM Wallet ",null);
-        if(cursor!=null && cursor.moveToFirst()){
-             Double totalamount=cursor.getDouble(0);
-             return totalamount;
+    public Double readwalletamount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT totalamount FROM Wallet ", null);
+        if (cursor != null && cursor.moveToFirst()) {
+            Double totalamount = cursor.getDouble(0);
+            return totalamount;
         }
         return null;
     }
 
 
-
-    public void storetransactions(Double amountinvest,String Transactiontime,String walletid){
-        SQLiteDatabase db=this.getWritableDatabase();
-
-        ContentValues cv= new ContentValues();
-        cv.put("transactiontime",Transactiontime);
-        cv.put("amount",amountinvest);
-        cv.put("Walletid",walletid);
-        db.insert("Transactions",null,cv);
-    }
-
     //storing stocks values
 
 
     //getting average of stocks values
-    public Double stocksaverage(int Portfolioid){
-        SQLiteDatabase db=this.getReadableDatabase();
+    public Double stocksaverage(int Portfolioid) {
+        SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor= db.rawQuery("SELECT AVG(stockvalue) FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
+        Cursor cursor = db.rawQuery("SELECT AVG(stockvalue) FROM STOCKSVALUES WHERE portfolioid='Portfolioid'", null);
         Double avgstocks;
-        if(cursor!=null && cursor.moveToFirst()){
-            avgstocks=cursor.getDouble(0);
+        if (cursor != null && cursor.moveToFirst()) {
+            avgstocks = cursor.getDouble(0);
             return avgstocks;
         }
         return null;
@@ -763,14 +725,14 @@ SQLiteDatabase db;
         if (cursor != null && cursor.moveToFirst()) {
             int count = cursor.getInt(0);
             cursor.close();
-            return (count ==0 ); //set it to 10 later
+            return (count == 0); //set it to 10 later
         }
 
         return false; // Cursor is null or an error occurred
     }
 
-    public int readportfoliovaluerows(int Portfolioid){
-        SQLiteDatabase db= this.getReadableDatabase();
+    public int readportfoliovaluerows(int Portfolioid) {
+        SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM STOCKSVALUES WHERE portfolioid='Portfolioid'", null);
 
         if (cursor != null && cursor.moveToFirst()) {
@@ -778,41 +740,21 @@ SQLiteDatabase db;
             cursor.close();
             return count;
         }
-         return 0;
+        return 0;
 
     }
 
 
-
-    public String fetchwalletid(){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT walletid FROM Wallet LIMIT 1",null);
+    public String fetchwalletid() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT walletid FROM Wallet LIMIT 1", null);
         String walletid;
-        if(cursor!=null && cursor.moveToFirst()){
-             walletid=cursor.getString(0);
-             return walletid;
+        if (cursor != null && cursor.moveToFirst()) {
+            walletid = cursor.getString(0);
+            return walletid;
         }
         return null;
     }
-
-
-    public void adduserportfolio(int portfolioID,String walletid,Double percentinstock){
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues cv=new ContentValues();
-        cv.put("stockportfolio",portfolioID);
-        cv.put("Walletid",walletid);
-        cv.put("percentinstock",percentinstock);
-
-        db.insert("UserPortoflio",null,cv);
-
-    }
-
-
-
-
-
-
-
 
 
 
@@ -836,17 +778,11 @@ SQLiteDatabase db;
     }
 
 
-
-    public void deleteStocksValueData(int Portfolioid){
-        SQLiteDatabase db=this.getWritableDatabase();
-        db.execSQL("DELETE FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
+    public void deleteStocksValueData(int Portfolioid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM STOCKSVALUES WHERE portfolioid='Portfolioid'", null);
 
     }
-
-
-
-
-
 
 
     public int difftimestamp(String firsttimestamp, String currenttimestamp) {
@@ -873,16 +809,14 @@ SQLiteDatabase db;
     }
 
 
+    public boolean readStocksValue(int Portfolioid) {
 
-
-    public boolean readStocksValue(int Portfolioid){
-
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT portfolioid FROM STOCKSVALUES WHERE portfolioid='Portfolioid'",null);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT portfolioid FROM STOCKSVALUES WHERE portfolioid='Portfolioid'", null);
         if (cursor != null && cursor.moveToFirst()) {
             int count = cursor.getInt(0);
             cursor.close();
-            return (count >=0 && count <=2);    //set upper limit to 10
+            return (count >= 0 && count <= 2);    //set upper limit to 10
         }
 
         return false; // Cursor is null or an error occurred
@@ -891,16 +825,15 @@ SQLiteDatabase db;
     }
 
 
-
     //storing stocks values
-    public void storestocksvalue(Double Stockvalue,String Timestamp,int Portfolioid){   //when the table is null
-        SQLiteDatabase db=this.getWritableDatabase();
+    public void storestocksvalue(Double Stockvalue, String Timestamp, int Portfolioid) {   //when the table is null
+        SQLiteDatabase db = this.getWritableDatabase();
 
-        ContentValues cv=new ContentValues();
-        cv.put("stockvalue",Stockvalue);
-        cv.put("timestamp",Timestamp);
-        cv.put("portfolioid",Portfolioid);
-        db.insert("STOCKSVALUES",null,cv);
+        ContentValues cv = new ContentValues();
+        cv.put("stockvalue", Stockvalue);
+        cv.put("timestamp", Timestamp);
+        cv.put("portfolioid", Portfolioid);
+        db.insert("STOCKSVALUES", null, cv);
     }
 
 
@@ -916,41 +849,33 @@ SQLiteDatabase db;
     }
 
 
+//    public void readpreviousaverage(int Portfolioid){
+//        SQLiteDatabase db=this.getReadableDatabase();
+//        Cursor cursor=db.rawQuery("SELECT previousaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
+//        if(cursor.moveToFirst()){
+//
+//        }
+//    }
+//
+//    public void readnewaverage(int Portfolioid){
+//        SQLiteDatabase db=this.getReadableDatabase();
+//        Cursor cursor=db.rawQuery("SELECT newaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
+//        if(cursor.moveToFirst()){
+//
+//        }
+//    }
 
 
-
-    public void readpreviousaverage(int Portfolioid){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("SELECT previousaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
-        if(cursor.moveToFirst()){
-
-        }
-    }
-
-    public void readnewaverage(int Portfolioid){
-        SQLiteDatabase db=this.getReadableDatabase();
-        Cursor cursor=db.rawQuery("SELECT newaverage FROM PORTFOLIOSAVERAGE WHERE portfolioid='Portfolioid'",null);
-        if(cursor.moveToFirst()){
-
-        }
-    }
-
-
-
-    public void updatepreviousaverage(int Portfolioid,Double prevaverage){
-        SQLiteDatabase db=this.getWritableDatabase();
+    public void updatepreviousaverage(int Portfolioid, Double prevaverage) {
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE PORTFOLIOSAVERAGE SET previousaverage='prevaverage' WHERE portfolioid='Portfolioid'");
     }
 
 
-
-
-    public void updatenewaverage(int Portfolioid,Double newvaverage){
-        SQLiteDatabase db=this.getWritableDatabase();
+    public void updatenewaverage(int Portfolioid, Double newvaverage) {
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("UPDATE PORTFOLIOSAVERAGE SET newaverage='newvaverage' WHERE portfolioid='Portfolioid'");
     }
-
-
 
 
     public boolean findPortfolioid(int Portfolioid) {
@@ -972,22 +897,47 @@ SQLiteDatabase db;
     }
 
 
-    public void insertnewaverage(Double newAverage , int Portfolioid){
-        SQLiteDatabase db=this.getWritableDatabase();
-        ContentValues cv= new ContentValues();
-        cv.put("newaverage",newAverage);
-        cv.put("portfolioid",Portfolioid);
-        db.insert("PORTFOLIOSAVERAGE",null,cv);
+    public void insertnewaverage(Double newAverage, int Portfolioid) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("newaverage", newAverage);
+        cv.put("portfolioid", Portfolioid);
+        db.insert("PORTFOLIOSAVERAGE", null, cv);
     }
 
 
+    public void populatetransactionshistory(String transactime, String walletid, Double amount) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("walletid", walletid);
+        cv.put("amount", amount);
+        cv.put("transactiontime", transactime);
+        db.insert("Transactions", null, cv);
 
 
+    }
+
+    public Cursor readTransactions() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Transactions", null);
+        return cursor;
+    }
+
+    public void adduserportfolio(int portfolioID, String walletid, Double percentinstock) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stockportfolio", portfolioID);
+        cv.put("Walletid", walletid);
+        cv.put("percentinstock", percentinstock);
+
+        db.insert("UserPortoflio", null, cv);
+
+    }
+
+    public Cursor readUserPortfolio() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Walletid,stockportfolio,percentinstock FROM UserPortoflio ", null);
+        return cursor;
+    }
 
 }
-
-
-
-
-
-

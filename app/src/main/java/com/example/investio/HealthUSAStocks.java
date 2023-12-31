@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -76,15 +77,32 @@ public class HealthUSAStocks extends AppCompatActivity {
                         getamount=edtamount.getText().toString();
                         amountinvest=Double.parseDouble(getamount);
 
-//                        String timestamp=db.getCurrentTimestamp();
-                        String walletid=db.fetchwalletid();
-//                        db.storetransactions(amountinvest,timestamp,walletid);
 
-                        int portfolioid=((startingIndex/10)+1);
-                        Double percentinstockportfolio;
-                        Double amountinwallet=db.readwalletamount();
-                        percentinstockportfolio=((amountinvest/amountinwallet)*100);
-                        db.adduserportfolio(portfolioid,walletid,percentinstockportfolio);
+                       if(amountinvest<=db.readwalletamount()){
+
+                           String walletid=db.fetchwalletid();
+
+
+
+                           //populating user portfolio
+                           int portfolioid=((startingIndex/10)+1);
+                           Double percentinstockportfolio;
+                           Double amountinwallet=db.readwalletamount();
+                           percentinstockportfolio=((amountinvest/amountinwallet)*100);
+                           db.adduserportfolio(portfolioid,walletid,percentinstockportfolio);
+
+                           // populating  transactions history table
+                           String transactime= db.getCurrentTimestamp();
+
+                           db.populatetransactionshistory(transactime,walletid,amountinvest);
+
+                       }
+
+                       else {
+                           Toast.makeText(getApplicationContext(),"Sorry,You don't have sufficient amount in your wallet",Toast.LENGTH_SHORT);
+                       }
+
+
 
 
 
@@ -217,7 +235,7 @@ public class HealthUSAStocks extends AppCompatActivity {
 //                                   String firsttime=db.readFirstStockTime(portfolioid);
 //                                   int datediff;
 //                                   datediff=db.difftimestamp(firsttime,currentime);
-////next    if next is not equal to the already present next
+//    if next is not equal to the already present next
 //                                   Double newaverage=db.stocksaverage(portfolioid);
 //                                   if(!db.findPortfolioid(portfolioid)){
 //                                       db.insertnewaverage(newaverage,portfolioid);

@@ -4,9 +4,11 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+
     app:cardCornerRadius="10dp"
     app:cardElevation="5dp"
-    android:layout_margin="5dp"
+
+    android:layout_margin="10dp"
 
     android:padding="16dp">
 
@@ -14,39 +16,42 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@drawable/borderdata_background">
-
-        <TextView
-            android:id="@+id/companyNameTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Company: "
-            android:textSize="15sp"
-            android:textColor="#449FE4"/>
-
-        <TextView
-            android:id="@+id/companySymbolTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Symbol: "
-            android:textSize="15sp"
-            android:textColor="#449FE4"/>
+        android:background="@drawable/borderdata_background"
+        >
 
 
 
         <TextView
-            android:id="@+id/closeTextView"
+            android:id="@+id/walletID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Close: "
+            android:textSize="15sp"
+            android:textColor="#449FE4"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:id="@+id/portfolioID"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="15sp"
+            android:textColor="#449FE4"
+            android:layout_margin="5dp"/>
+
+        <TextView
+            android:id="@+id/percentInPortfolio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_margin="5dp"
             android:textSize="15sp"
             android:textColor="#449FE4"/>
+
+
 
 
 
     </LinearLayout>
-
-
 
 
 </androidx.cardview.widget.CardView>
