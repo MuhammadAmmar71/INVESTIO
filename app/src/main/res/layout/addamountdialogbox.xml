@@ -42,19 +42,43 @@
 
             />
 
-
-
-        <Button
-            android:layout_width="100dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add amount"
-            android:textColor="#fff"
-            android:id="@+id/btnaddamount"
-            android:layout_marginLeft="130dp"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/roundbutton"
+            android:orientation="horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center">
 
-            />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Withdraw Money"
+                android:textColor="#fff"
+                android:id="@+id/btnWithdrawAmount"
+
+
+               android:layout_margin="5dp"
+
+                android:background="@drawable/roundbutton"
+
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Money"
+                android:textColor="#fff"
+                android:id="@+id/btnaddamount"
+            android:layout_margin="5dp"
+
+                android:background="@drawable/roundbutton"
+
+                />
+
+        </LinearLayout>
+
+
+
 
     </LinearLayout>
 

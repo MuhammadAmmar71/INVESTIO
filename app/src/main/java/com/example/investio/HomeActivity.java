@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,6 +26,7 @@ import java.util.Random;
 public class HomeActivity extends AppCompatActivity implements StocksOnClickInterface{
 
 
+
     RecyclerView recview;
     ArrayList<MainUiParentModelClass> parentModelClassArrayList;
     ArrayList<MainUiChildModelClass> stocks;
@@ -33,7 +35,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
     MainUiParentAdapter parentAdapt;
 
     TextView txtuserid;
-//    FloatingActionButton btnfloat;
+
 
     CardView btntransachistory;
 
@@ -84,13 +86,13 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         stocks.add(new MainUiChildModelClass(R.drawable.tech));
         stocks.add(new MainUiChildModelClass(R.drawable.health));
         stocks.add(new MainUiChildModelClass(R.drawable.education));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
-        stocks.add(new MainUiChildModelClass(R.drawable.graph));
+        stocks.add(new MainUiChildModelClass(R.drawable.realestate));
+        stocks.add(new MainUiChildModelClass(R.drawable.bank));
+        stocks.add(new MainUiChildModelClass(R.drawable.agriculture));
+        stocks.add(new MainUiChildModelClass(R.drawable.dividendstocks));
+        stocks.add(new MainUiChildModelClass(R.drawable.peratio));
+        stocks.add(new MainUiChildModelClass(R.drawable.pbratio));
+        stocks.add(new MainUiChildModelClass(R.drawable.worldtech));
 
 
 
@@ -101,13 +103,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         crypto.add(new MainUiChildModelClass(R.drawable.ethereum));
         crypto.add(new MainUiChildModelClass(R.drawable.bitcoin));
         crypto.add(new MainUiChildModelClass(R.drawable.dodgecoin));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
-//        crypto.add(new MainUiChildModelClass(R.drawable.crypto));
+
 
 
 
@@ -116,12 +112,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
         forex.add(new MainUiChildModelClass(R.drawable.riyaal));
         forex.add(new MainUiChildModelClass(R.drawable.pound));
         forex.add(new MainUiChildModelClass(R.drawable.euro));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
-//        forex.add(new MainUiChildModelClass(R.drawable.forex));
+
 
 
         parentModelClassArrayList.add(new MainUiParentModelClass(forex));
@@ -167,32 +158,89 @@ walletcard.setOnClickListener(new View.OnClickListener() {
 
         EditText edtamount=dialog.findViewById(R.id.edtamountwallet);
 
-        Button   btnSave=dialog.findViewById(R.id.btnaddamount);
+        Button   btnAddamount=dialog.findViewById(R.id.btnaddamount);
+        Button   btnWithdraw=dialog.findViewById(R.id.btnWithdrawAmount);
 
-        btnSave.setOnClickListener(new View.OnClickListener() {
+                btnAddamount.setOnClickListener(new View.OnClickListener() {
 
-            String getamount;
-            Double newamount;
-            @Override
-            public void onClick(View view) {
-                 getamount=edtamount.getText().toString();
-                newamount=Double.parseDouble(getamount);
-             String timestamp=db.getCurrentTimestamp();
+                    String getamount;
+                    Double newamount;
+                    @Override
+                    public void onClick(View view) {
+                         getamount=edtamount.getText().toString();
+                        newamount=Double.parseDouble(getamount);
+                        if(newamount>=1){
+                            String timestamp=db.getCurrentTimestamp();
 
-             Double previousamount = db.readwalletamount();
-             Double  totalamount=newamount + previousamount; // HERE WE GET OUR WALLET AMOUNT
-
-
-
-
-                db.updatewalletamount(totalamount);
-
-                amountwallet.setText(totalamount.toString());
-                dialog.dismiss();
+                            Double previousamount = db.readwalletamount();
+                            Double  totalamount=newamount + previousamount; // HERE WE GET OUR WALLET AMOUNT
 
 
-            }
-        });
+
+
+
+                            db.updatewalletamount(totalamount);
+
+                            amountwallet.setText(totalamount.toString());
+
+                            dialog.dismiss();
+
+                        }
+
+                        else{
+                            Toast.makeText(getApplicationContext(),"Invalid Amount",Toast.LENGTH_SHORT).show();
+                        }
+
+
+                    }
+                });
+
+                btnWithdraw.setOnClickListener(new View.OnClickListener() {
+
+                    String getamount;
+                    Double WithdrawAmount;
+                    @Override
+                    public void onClick(View view) {
+
+
+
+                        getamount=edtamount.getText().toString();
+                        WithdrawAmount=Double.parseDouble(getamount);
+
+
+
+                        Double previousAmount=db.readwalletamount();
+
+                        if(WithdrawAmount>=1){
+                            if(WithdrawAmount<=previousAmount){
+
+                                Double updatedAmount=previousAmount-WithdrawAmount;
+
+                                db.updatewalletamount(updatedAmount);
+
+                                amountwallet.setText(updatedAmount.toString());
+
+                            }
+                            else {
+                                Toast.makeText(HomeActivity.this, "You don't have enough money in the wallet", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+                        else{
+                            Toast.makeText(HomeActivity.this, "Invalid Amount", Toast.LENGTH_SHORT).show();
+
+                        }
+
+
+
+
+
+
+                        dialog.dismiss();
+                    }
+                });
+
 
         dialog.show();
 
@@ -209,6 +257,12 @@ btntransachistory.setOnClickListener(new View.OnClickListener() {
         startActivity(new Intent(getApplicationContext(),TransactionsHistory.class));
     }
 });
+
+
+
+
+
+
 
 btnUserPortfolio.setOnClickListener(new View.OnClickListener() {
     @Override

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,6 +71,16 @@ public class HealthUSAStocks extends AppCompatActivity {
 
                 btnInvest.setOnClickListener(new View.OnClickListener() {
 
+
+
+
+
+
+
+
+
+
+
                     String getamount;
                     Double amountinvest;
                     @Override
@@ -78,35 +89,52 @@ public class HealthUSAStocks extends AppCompatActivity {
                         amountinvest=Double.parseDouble(getamount);
 
 
-                       if(amountinvest<=db.readwalletamount()){
+                        if(amountinvest>=1){
+                            if(amountinvest<=db.readwalletamount()){
 
-                           String walletid=db.fetchwalletid();
-
-
-
-                           //populating user portfolio
-                           int portfolioid=((startingIndex/10)+1);
-                           Double percentinstockportfolio;
-                           Double amountinwallet=db.readwalletamount();
-                           percentinstockportfolio=((amountinvest/amountinwallet)*100);
-                           db.adduserportfolio(portfolioid,walletid,percentinstockportfolio);
-
-                           // populating  transactions history table
-                           String transactime= db.getCurrentTimestamp();
-
-                           db.populatetransactionshistory(transactime,walletid,amountinvest);
-
-                       }
-
-                       else {
-                           Toast.makeText(getApplicationContext(),"Sorry,You don't have sufficient amount in your wallet",Toast.LENGTH_SHORT);
-                       }
+                                String walletid=db.fetchwalletid();
 
 
 
+                                //populating user portfolio
+                                int portfolioid=((startingIndex/10)+1);
+                                Double percentinstockportfolio;
+                                Double amountinwallet=db.readwalletamount();
+                                percentinstockportfolio=((amountinvest/amountinwallet)*100);
+                                db.adduserportfolio(portfolioid,walletid,percentinstockportfolio);
+
+                                // populating  transactions history table
+                                String transactime= db.getCurrentTimestamp();
+
+                                db.populatetransactionshistory(transactime,walletid,amountinvest,portfolioid);
+
+                                Double AmountAfterInvest=amountinwallet-amountinvest;
+
+                                db.updatewalletamount(AmountAfterInvest);
+
+
+
+                                // here we will be updating our ui in the wallet
+
+                                // updateWalletAmountUI(AmountAfterInvest);
+
+
+
+                            }
+
+                            else {
+                                Toast.makeText(getApplicationContext(),"Sorry,You don't have sufficient amount in your wallet",Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    else{
+                            Toast.makeText(getApplicationContext(),"Invalid Amount",Toast.LENGTH_SHORT).show();
+                        }
 
 
                         dialog.dismiss();
+
+
 
 
                     }
@@ -123,7 +151,7 @@ public class HealthUSAStocks extends AppCompatActivity {
 
 
 
-//         Set up RecyclerView
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ApiAdapter();
         recyclerView.setAdapter(adapter);
@@ -133,13 +161,14 @@ public class HealthUSAStocks extends AppCompatActivity {
 
 
 
-// Assuming you want to start fetching from the 10th row (index 9 as indexing starts from 0)
-        // int startingIndex = 10;
-        // Fetch data from the database
+
+
+
         List<CompanyData> databaseData = db.readingStockslist(startingIndex);
+
         companyDataList.addAll(databaseData);
 
-        // Add multiple symbols to the list
+
         List<String> symbols = new ArrayList<>();
         symbols.add("JNJ");
         symbols.add("UNH");
@@ -151,7 +180,8 @@ public class HealthUSAStocks extends AppCompatActivity {
         symbols.add("MDT");
         symbols.add("GILD");
         symbols.add("BMY");
-// Fetch data from the API
+
+
 
 
         for (String symbol : symbols) {
@@ -174,19 +204,23 @@ public class HealthUSAStocks extends AppCompatActivity {
 
     void callingapi(String symbol, List<CompanyData> companyDataList ) {
 
+        String APIkey=generateAPIKey();
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://www.alphavantage.co/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
+
         JSONPlaceholderApi jsonPlaceholderApi = retrofit.create(JSONPlaceholderApi.class);
 
-        Call<ApiResponse> call = jsonPlaceholderApi.getApiResponse(symbol);
+        Call<ApiResponse> call = jsonPlaceholderApi.getApiResponse(symbol,APIkey);
 
         call.enqueue(new Callback<ApiResponse>() {
             @Override
             public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 if (!response.isSuccessful()) {
+
                     textViewResult.setText("Code: " + response.code());
                     return;
                 }
@@ -195,85 +229,114 @@ public class HealthUSAStocks extends AppCompatActivity {
                 Map<String, TimeSeriesDaily> timeSeriesDailyMap = apiResponse.getTimeSeriesDailyMap();
 
                 if (timeSeriesDailyMap != null) {
-                    // Fetch the first entry from the map
+
                     TimeSeriesDaily firstTimeSeriesDaily = timeSeriesDailyMap.values().iterator().next();
 
 
 
-                    // Update data in the CompanyData list based on symbol match
+
                     for (CompanyData companyData : companyDataList) {
-                        if (companyData.getStockSymbol().equals(symbol)) {
-                            // Update the CompanyData object with data from the API
-                            companyData.setClose(firstTimeSeriesDaily.getClose());
+    if (companyData.getStockSymbol().equals(symbol)) {
 
-//                            //preparing data to store into portfolio table
-//                            String getStockValue = firstTimeSeriesDaily.getClose();
-//                            Double stockValue = Double.parseDouble(getStockValue);
-//                            String timestamp = db.getCurrentTimestamp();
-//
-//
-//                            if (db.isnullstocksvalue()) {
-//
-//                                db.storestocksvalue(stockValue, timestamp,portfolioid);
-//
-//                            }
-//
-//
-//                            else {
-//
-//                                int count = db.readportfoliovaluerows(portfolioid);
-//
-//                               if(count>=0 || count<2){  // set it to  10 later
-//
-//                                   db.updateStocksValue(portfolioid,stockValue,timestamp);
-//
-//                               }
-//
-//
-//                            else {
-//                                   String currentime= db.getCurrentTimestamp();
-//                                   String firsttime=db.readFirstStockTime(portfolioid);
-//                                   int datediff;
-//                                   datediff=db.difftimestamp(firsttime,currentime);
-//    if next is not equal to the already present next
-//                                   Double newaverage=db.stocksaverage(portfolioid);
-//                                   if(!db.findPortfolioid(portfolioid)){
-//                                       db.insertnewaverage(newaverage,portfolioid);
-//                                   }
-//                                   else{
-//                                       db.updatenewaverage(portfolioid,newaverage);
-//                                   }
-//
-//                           if(datediff>=1440){
-//
-//
-//
-//                                       Double prevaverage;
-//                                       prevaverage=db.stocksaverage(portfolioid);
-//
-//                                       db.updatepreviousaverage(portfolioid,newaverage);
-//
-//                                       db.deleteStocksValueData(portfolioid);
-//
-//
-//
-//
-//
-//                                       db.updateStocksValue(portfolioid,stockValue,timestamp);
-//                                       Double newstocksaverage;
-//                                       newstocksaverage=db.stocksaverage(portfolioid);
-//
-//                                       Double profit=newstocksaverage-previousstocksaverage;
-//                                       Double amountinvest;
+        companyData.setClose(firstTimeSeriesDaily.getClose());
 
 
-//                                   }
-//                               }
+        String getStockValue = firstTimeSeriesDaily.getClose();
+        Double stockValue = Double.parseDouble(getStockValue);
+        String timestamp = db.getCurrentTimestamp();
 
 
 
-//
-//                            }
+
+
+
+
+
+
+
+                if (db.isNullStocksValue()) {
+                    System.out.println(db.isNullStocksValue());
+
+                    db.storestocksvalue(portfolioid,stockValue, timestamp);
+
+                }
+
+
+                else
+                      {
+
+                    int count = db.readPortfolioValueRows(portfolioid);
+
+                                System.out.println(count);
+
+                                if(count>=1 && count<10){  // set it to  10 later
+
+                                    db.storestocksvalue(portfolioid,stockValue, timestamp);
+
+                               }
+
+
+                            else
+                                  {
+                                   String currentime= db.getCurrentTimestamp();
+                                   String firsttime=db.readFirstStockTime(portfolioid);
+                                   int datediff;
+                                   datediff=db.difftimestamp(firsttime,currentime);
+
+
+
+                                   Double newaverage=db.stocksaverage(portfolioid);
+                                           if(!db.findPortfolioid(portfolioid)){
+                                               db.insertnewaverage(newaverage,portfolioid);
+                                           }
+                                           else{
+                                               db.updatenewaverage(portfolioid,newaverage);
+                                           }
+
+                                            if(datediff>=1440){
+
+
+
+                                               Double prevaverage;
+                                               prevaverage=db.stocksaverage(portfolioid);
+
+
+
+                                               db.updatepreviousaverage(portfolioid,newaverage);
+
+                                               db.deleteStocksValueData(portfolioid);
+
+
+
+
+
+                                       db.storestocksvalue(portfolioid,stockValue, timestamp);
+
+                                               Double newstocksaverage;
+                                               newstocksaverage=db.stocksaverage(portfolioid);
+
+
+                                                    Double amountinvest=db.readAmountTransaction(portfolioid);
+                                                    Double profit=newstocksaverage-prevaverage;
+                                                 Double formulaROI=((amountinvest/prevaverage)*(profit));
+
+                                                  // reflecting that value to wallet
+                                                Double amountInWallet =  db.readwalletamount();
+                                                Double updatedAmount = amountInWallet + formulaROI;
+                                                 db.updatewalletamount(updatedAmount);
+                     //    reflecting amount in wallet
+                                            updateWalletAmountUI(updatedAmount);
+
+
+
+
+                                           }
+                               }
+
+
+
+
+                           }
 
 
 
@@ -282,8 +345,9 @@ public class HealthUSAStocks extends AppCompatActivity {
                         }
                     }
 
-                    // After fetching data from the API and updating companyDataList, set the updated data in the adapter
+
                     adapter.setData(companyDataList);
+
                 }
             }
 
@@ -298,6 +362,32 @@ public class HealthUSAStocks extends AppCompatActivity {
 
 
     }
+
+
+    public void updateWalletAmountUI(Double updatedAmount) {
+        EditText edtNewAmount = findViewById(R.id.edtamountwallet);
+        edtNewAmount.setText(String.valueOf(updatedAmount));
+    }
+
+
+
+    public static String generateAPIKey(){
+
+//        String [] APIkeys={"Y3FY53X742HFLF11","A6FOXHUUEGIUIR7I","JWIQELY84ASSFMPI","K6T7TZ4N2PSI03BZ","32PZJ27O8UTN9C8A","RRN07H4U1EXZCVGZ","EON3XDHZXVAC03U7","MTICII9DWOLBHI1I","L5SHNN1GY5H22JLC","JR5MCJOWJ27DPBK2","KSO2DKVADL7FK8DD","DXJ48PCZQX12PMQO","23NC6GVQT7FB2EEV","X37R5WFJOCFE9T35","2HHQJB5BEAPMUTFS"};
+
+ //       String [] APIkeys={"KSO2DKVADL7FK8DD","DXJ48PCZQX12PMQO","23NC6GVQT7FB2EEV","X37R5WFJOCFE9T35"};
+
+       // String [] APIkeys={"2HHQJB5BEAPMUTFS"};
+
+        String [] APIkeys={"WSNYLKAX28Y52KYY"};
+
+        Random random=new Random();
+
+        return  APIkeys[random.nextInt(APIkeys.length)];
+    }
+
+
+
 }
 
 
