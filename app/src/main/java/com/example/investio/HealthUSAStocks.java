@@ -233,8 +233,6 @@ public class HealthUSAStocks extends AppCompatActivity {
                     TimeSeriesDaily firstTimeSeriesDaily = timeSeriesDailyMap.values().iterator().next();
 
 
-
-
                     for (CompanyData companyData : companyDataList) {
     if (companyData.getStockSymbol().equals(symbol)) {
 
@@ -244,14 +242,6 @@ public class HealthUSAStocks extends AppCompatActivity {
         String getStockValue = firstTimeSeriesDaily.getClose();
         Double stockValue = Double.parseDouble(getStockValue);
         String timestamp = db.getCurrentTimestamp();
-
-
-
-
-
-
-
-
 
 
                 if (db.isNullStocksValue()) {
@@ -373,13 +363,9 @@ public class HealthUSAStocks extends AppCompatActivity {
 
     public static String generateAPIKey(){
 
-//        String [] APIkeys={"Y3FY53X742HFLF11","A6FOXHUUEGIUIR7I","JWIQELY84ASSFMPI","K6T7TZ4N2PSI03BZ","32PZJ27O8UTN9C8A","RRN07H4U1EXZCVGZ","EON3XDHZXVAC03U7","MTICII9DWOLBHI1I","L5SHNN1GY5H22JLC","JR5MCJOWJ27DPBK2","KSO2DKVADL7FK8DD","DXJ48PCZQX12PMQO","23NC6GVQT7FB2EEV","X37R5WFJOCFE9T35","2HHQJB5BEAPMUTFS"};
+        String [] APIkeys={"Y3FY53X742HFLF11","A6FOXHUUEGIUIR7I","JWIQELY84ASSFMPI","K6T7TZ4N2PSI03BZ","32PZJ27O8UTN9C8A","RRN07H4U1EXZCVGZ","EON3XDHZXVAC03U7","MTICII9DWOLBHI1I","L5SHNN1GY5H22JLC","JR5MCJOWJ27DPBK2","KSO2DKVADL7FK8DD","DXJ48PCZQX12PMQO","23NC6GVQT7FB2EEV","X37R5WFJOCFE9T35","2HHQJB5BEAPMUTFS"};
 
- //       String [] APIkeys={"KSO2DKVADL7FK8DD","DXJ48PCZQX12PMQO","23NC6GVQT7FB2EEV","X37R5WFJOCFE9T35"};
 
-       // String [] APIkeys={"2HHQJB5BEAPMUTFS"};
-
-        String [] APIkeys={"WSNYLKAX28Y52KYY"};
 
         Random random=new Random();
 

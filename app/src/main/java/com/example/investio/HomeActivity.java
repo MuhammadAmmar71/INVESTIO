@@ -1,6 +1,8 @@
 package com.example.investio;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,6 +11,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +55,7 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
     TextView btnlogout;
 
     CardView btnUserPortfolio;
+    Toolbar toolbar;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,10 @@ public class HomeActivity extends AppCompatActivity implements StocksOnClickInte
 
         btnUserPortfolio=findViewById(R.id.btnUserPortfolio);
 
+
+     toolbar=findViewById(R.id.toolbar);
+
+     setSupportActionBar(toolbar);
 
 
 
@@ -441,11 +451,21 @@ btnUserPortfolio.setOnClickListener(new View.OnClickListener() {
     }
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        new MenuInflater(this).inflate(R.menu.opt_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int itemID= item.getItemId();
+        if (itemID==R.id.optlogout){
+            View view = new View(this);
+            logout(view);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 
