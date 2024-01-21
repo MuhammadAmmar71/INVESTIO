@@ -39,10 +39,10 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.transactionIdTextView.setText("TransactionID: " + String.valueOf(transactionID.get(position)));
-        holder.walletIdTextView.setText("WalletID: " + String.valueOf(walletID.get(position)));
-        holder.amountTextView.setText("Amount: " + String.valueOf(amount.get(position)));
-        holder.timeTextView.setText("Transaction Time: " + String.valueOf(transactionTime.get(position)));
+        holder.transactionIdTextView.setText("PortfolioID: " + String.valueOf(transactionID.get(position)));
+        holder.walletIdTextView.setText("Transaction Time: " + String.valueOf(walletID.get(position)));
+        holder.amountTextView.setText("WalletID: " + String.valueOf(amount.get(position)));
+        holder.timeTextView.setText("Amount: " + String.valueOf(transactionTime.get(position)));
     }
 
 

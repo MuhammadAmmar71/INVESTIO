@@ -218,22 +218,22 @@ public class DatabaseClass extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
 
 
-//        // Drop all tables if exist
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Users");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Wallet");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Transactions");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS StockPortfolios");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stockslist");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS forexasset");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Currencies");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Customportfolio");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS CryptoAsset");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Crypto");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Metals");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
-//        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS STOCKVALUES");
+        // Drop all tables if exist
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Users");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Wallet");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Transactions");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS StockPortfolios");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS stockslist");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS forexasset");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Currencies");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Customportfolio");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS CryptoAsset");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Crypto");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS Metals");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS UserPortoflio");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS PortfolioTransaction");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS AmountHistory");
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS STOCKVALUES");
 
 
         // Recreate all tables
@@ -717,18 +717,7 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
 
-    public void populatetransactionshistory(String transactime, String walletid, Double amount,int portfolioID) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("walletid", walletid);
-        cv.put("amount", amount);
-        cv.put("transactiontime", transactime);
-        cv.put("PortfolioID", portfolioID);
 
-        db.insert("Transactions", null, cv);
-
-
-    }
 
     public Cursor readTransactions() {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -757,22 +746,9 @@ public class DatabaseClass extends SQLiteOpenHelper {
 
 
 
-    public void adduserportfolio(int portfolioID, String walletid, Double percentinstock) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("stockportfolio", portfolioID);
-        cv.put("Walletid", walletid);
-        cv.put("percentinstock", percentinstock);
 
-        db.insert("UserPortoflio", null, cv);
 
-    }
 
-    public Cursor readUserPortfolio() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT Walletid,stockportfolio,percentinstock FROM UserPortoflio ", null);
-        return cursor;
-    }
 
 
 
@@ -936,6 +912,35 @@ public class DatabaseClass extends SQLiteOpenHelper {
         db.insert("PortfolioAverage", null, cv);
     }
 
+    public void adduserportfolio(int portfolioID, String walletid, Double percentinstock) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("stockportfolio", portfolioID);
+        cv.put("Walletid", walletid);
+        cv.put("percentinstock", percentinstock);
+
+        db.insert("UserPortoflio", null, cv);
+
+    }
+
+    public void populatetransactionshistory(String transactime, String walletid, Double amount,int portfolioID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("walletid", walletid);
+        cv.put("amount", amount);
+        cv.put("transactiontime", transactime);
+        cv.put("transaction_id", portfolioID);
+
+        db.insert("Transactions", null, cv);
+
+
+    }
+
+    public Cursor readUserPortfolio() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT Walletid,stockportfolio,percentinstock FROM UserPortoflio ", null);
+        return cursor;
+    }
 
 }
 

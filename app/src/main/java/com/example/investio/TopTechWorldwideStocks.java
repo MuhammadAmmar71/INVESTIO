@@ -216,89 +216,89 @@ public class TopTechWorldwideStocks extends AppCompatActivity {
                             String timestamp = db.getCurrentTimestamp();
 
 
-                            if (db.isNullStocksValue()) {
-                                System.out.println(db.isNullStocksValue());
-
-                                db.storestocksvalue(portfolioid,stockValue, timestamp);
-
-                            }
-
-
-                            else
-                            {
-
-                                int count = db.readPortfolioValueRows(portfolioid);
-
-                                System.out.println(count);
-
-                                if(count>=1 && count<10){
-
-                                    db.storestocksvalue(portfolioid,stockValue, timestamp);
-
-                                }
-
-
-                                else
-                                {
-                                    String currentime= db.getCurrentTimestamp();
-                                    String firsttime=db.readFirstStockTime(portfolioid);
-                                    int datediff;
-                                    datediff=db.difftimestamp(firsttime,currentime);
-
-
-                                    //   if next is not equal to the already present next
-                                    Double newaverage=db.stocksaverage(portfolioid);
-                                    if(!db.findPortfolioid(portfolioid)){
-                                        db.insertnewaverage(newaverage,portfolioid);
-                                    }
-                                    else{
-                                        db.updatenewaverage(portfolioid,newaverage);
-                                    }
-
-                                    if(datediff>=1440){
-
-
-
-                                        Double prevaverage;
-                                        prevaverage=db.stocksaverage(portfolioid);
-
-
-
-                                        db.updatepreviousaverage(portfolioid,newaverage);
-
-                                        db.deleteStocksValueData(portfolioid);
-
-
-
-
-
-                                        db.storestocksvalue(portfolioid,stockValue, timestamp);
-
-                                        Double newstocksaverage;
-                                        newstocksaverage=db.stocksaverage(portfolioid);
-
-
-                                        Double amountinvest=db.readAmountTransaction(portfolioid);
-                                        Double profit=newstocksaverage-prevaverage;
-                                        Double formulaROI=((amountinvest/prevaverage)*(profit));
-
-                                        // reflecting that value to wallet
-                                        Double amountInWallet =  db.readwalletamount();
-                                        Double updatedAmount = amountInWallet + formulaROI;
-                                        db.updatewalletamount(updatedAmount);
-                                        //    reflecting amount in wallet
-                                        updateWalletAmountUI(updatedAmount);
-
-
-
-
-                                    }
-                                }
-
-
+//                            if (db.isNullStocksValue()) {
+//                                System.out.println(db.isNullStocksValue());
+//
+//                                db.storestocksvalue(portfolioid,stockValue, timestamp);
+//
+//                            }
+//
+//
+//                            else
+//                            {
+//
+//                                int count = db.readPortfolioValueRows(portfolioid);
+//
+//                                System.out.println(count);
+//
+//                                if(count>=1 && count<10){
+//
+//                                    db.storestocksvalue(portfolioid,stockValue, timestamp);
+//
+//                                }
+//
+//
+//                                else
+//                                {
+//                                    String currentime= db.getCurrentTimestamp();
+//                                    String firsttime=db.readFirstStockTime(portfolioid);
+//                                    int datediff;
+//                                    datediff=db.difftimestamp(firsttime,currentime);
+//
+//
+//                                    //   if next is not equal to the already present next
+//                                    Double newaverage=db.stocksaverage(portfolioid);
+//                                    if(!db.findPortfolioid(portfolioid)){
+//                                        db.insertnewaverage(newaverage,portfolioid);
+//                                    }
+//                                    else{
+//                                        db.updatenewaverage(portfolioid,newaverage);
+//                                    }
+//
+//                                    if(datediff>=1440){
+//
+//
+//
+//                                        Double prevaverage;
+//                                        prevaverage=db.stocksaverage(portfolioid);
+//
+//
+//
+//                                        db.updatepreviousaverage(portfolioid,newaverage);
+//
+//                                        db.deleteStocksValueData(portfolioid);
+//
+//
+//
+//
+//
+//                                        db.storestocksvalue(portfolioid,stockValue, timestamp);
+//
+//                                        Double newstocksaverage;
+//                                        newstocksaverage=db.stocksaverage(portfolioid);
+//
+//
+//                                        Double amountinvest=db.readAmountTransaction(portfolioid);
+//                                        Double profit=newstocksaverage-prevaverage;
+//                                        Double formulaROI=((amountinvest/prevaverage)*(profit));
+//
+//                                        // reflecting that value to wallet
+//                                        Double amountInWallet =  db.readwalletamount();
+//                                        Double updatedAmount = amountInWallet + formulaROI;
+//                                        db.updatewalletamount(updatedAmount);
+//                                        //    reflecting amount in wallet
+//                                        updateWalletAmountUI(updatedAmount);
+//
+//
+//
+//
+//                                    }
+//                                }
 
 
-                            }
+
+
+     //                       }
 
 
 
